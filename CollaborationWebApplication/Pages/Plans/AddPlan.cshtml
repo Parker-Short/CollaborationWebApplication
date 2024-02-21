@@ -1,0 +1,21 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Plans.AddPlanModel
+@{
+}
+
+<form asp-page-handler="AddPlanHandler" asp-page="AddPlan">
+    <input type="text" asp-for="NewPlan.PlanName" placeholder="Plan Name" />
+    <span asp-validation-for="NewPlan.PlanName" class="text-danger"></span>
+    <br />
+
+    <input type="text" asp-for="NewPlan.Content" placeholder="Content" />
+    <span asp-validation-for="NewPlan.Content" class="text-danger"></span>
+    <br />
+
+    <select asp-for="NewPlan.UserID" asp-items="Model.Users" class="form-select">
+        <option value="">Select User</option>
+    </select>
+    <br />
+
+    <input type="submit" value="Create Plan" class="btn-outline-primary" />
+</form>

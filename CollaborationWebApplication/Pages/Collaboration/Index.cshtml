@@ -1,0 +1,52 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.Collaboration.IndexModel
+@{
+    ViewData["Title"] = "Collaboration Landing Page";
+}
+<h2>Collaboration Landing Page</h2>
+
+<!-- Button to go to the AddCollaboration page -->
+<a class="btn btn-primary" asp-page="/Collaboration/AddCollaboration">Add New Collaboration</a>
+
+<hr />
+<!-- Table for selecting existing collaborations -->
+<h3>Select an Existing </h3>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Collaboration Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string sqlQuery = @"
+        SELECT
+        Collaboration.CollabID,
+        Collaboration.CollabName
+        FROM
+        Collaboration
+        ";
+
+
+            //Create a reader for the plans
+            SqlDataReader CollabReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+            while (CollabReader.Read())
+            {
+                <tr>
+                    <td>@CollabReader["CollabName"]</td>
+                    <td>
+                        <a asp-page="CollabDashboard" class="btn-outline-dark"
+                           asp-route-collabid="@CollabReader["CollabID"]"
+                           asp-route-collabName="@CollabReader["CollabName"].ToString()">View Collaboration</a>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+
+<br />

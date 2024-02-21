@@ -1,0 +1,13 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Collaboration.AddCollaborationModel
+@{
+}
+
+<h2>Add Collaboration</h2>
+
+<form method="post">
+    <input type="text" asp-for="NewCollab.CollabName" placeholder="Collaboration Name" />
+    <span asp-validation-for="NewCollab.CollabName" class="text-danger"></span>
+    <br />
+    <input type="submit" value="Add Collaboration" class="btn-outline-primary" />
+</form>

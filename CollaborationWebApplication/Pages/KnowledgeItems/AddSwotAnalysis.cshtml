@@ -1,0 +1,36 @@
+﻿@page
+@model CollaborationWebApplication.Pages.KnowledgeItems.AddSwotAnalysisModel
+@{
+}
+
+
+<form asp-page-handler="AddSwotHandler" method="post">
+
+    <select asp-for="UserID" asp-items="Model.UserList" class="form-select">
+        <option value="">Select User</option>
+    </select>
+    <br />
+
+    <textarea asp-for="NewSwot.SwotName" placeholder="Name" class="form-control"></textarea>
+    <span asp-validation-for="NewSwot.SwotName" class="text-danger"></span>
+    <br />
+
+    <textarea asp-for="NewSwot.Strength" placeholder="Strengths" class="form-control"></textarea>
+    <span asp-validation-for="NewSwot.Strength" class="text-danger"></span>
+    <br />
+
+    <textarea asp-for="NewSwot.Weakness" placeholder="Weaknesses" class="form-control"></textarea>
+    <span asp-validation-for="NewSwot.Weakness" class="text-danger"></span>
+    <br />
+
+    <textarea asp-for="NewSwot.Opportunity" placeholder="Opportunities" class="form-control"></textarea>
+    <span asp-validation-for="NewSwot.Opportunity" class="text-danger"></span>
+    <br />
+
+    <textarea asp-for="NewSwot.Threat" placeholder="Threats" class="form-control"></textarea>
+    <span asp-validation-for="NewSwot.Threat" class="text-danger"></span>
+    <br /><br />
+
+    <input type="submit" value="Submit SWOT Analysis" class="btn btn-primary" />
+</form>
+

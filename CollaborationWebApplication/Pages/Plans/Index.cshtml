@@ -1,0 +1,53 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.Plans.IndexModel
+@{
+}
+
+<h1>Plans</h1>
+
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Plan Name</th>
+            <th>Description</th>
+            <th>Created By</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string sqlQuery = @"
+        SELECT
+        PlanData.PlanID,
+        PlanData.PlanName,
+        PlanData.Content,
+        UserData.FirstName + ' ' + UserData.LastName AS UserName
+        FROM
+        PlanData JOIN UserData
+        ON PlanData.UserID = UserData.UserID;
+        ";
+
+
+            //Create a reader for the plans
+            SqlDataReader PlanReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+            while (PlanReader.Read())
+            {
+                <tr>
+                    <td>@PlanReader["PlanName"]</td>
+                    <td>@PlanReader["Content"]</td>
+                    <td>@PlanReader["UserName"]</td>
+                    <td>
+                        <a asp-page="ViewPlan" class="btn-outline-secondary" asp-route-PlanID="@PlanReader["PlanID"]" asp-route-PlanName="@PlanReader["PlanName"]">View Plan -></a>
+
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<a class="btn btn-primary" asp-page="AddPlan">Add a new Plan -></a>

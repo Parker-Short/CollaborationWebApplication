@@ -1,0 +1,60 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.Plans.ViewPlanModel
+@{
+}
+
+@* <h1>@Model.Name</h1> *@
+
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Step Number:</th>
+            <th>Step Name:</th>
+            <th>Details:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string sqlQuery = @"
+        SELECT
+        PlanStep.StepNumber,
+        PlanStep.StepName,
+        PlanStep.StepDetail
+        FROM PlanStep
+        WHERE PlanStep.PlanID =" + @Model.PlanID + ";";
+
+            SqlDataReader PlanStepReader = DBClass.GeneralReaderQuery(sqlQuery);
+            //Creates reader for the plansteps
+            while (PlanStepReader.Read())
+            {
+                <tr>
+                    <td>@PlanStepReader["StepNumber"]</td>
+                    <td>@PlanStepReader["StepName"]</td>
+                    <td>@PlanStepReader["StepDetail"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@* <h2>Add Step to @Model.Name</h2> *@
+
+<form method="post" asp-page-handler="AddStep">
+    <input type="hidden" asp-for="NewStep.PlanID" value="@Model.PlanID" />
+
+    <div class="form-group">
+        <label asp-for="NewStep.StepNumber">Step Number</label>
+        <input asp-for="NewStep.StepNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewStep.StepName">Step Name</label>
+        <input asp-for="NewStep.StepName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NewStep.StepDetail">Details</label>
+        <textarea asp-for="NewStep.StepDetail" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Step</button>
+</form>

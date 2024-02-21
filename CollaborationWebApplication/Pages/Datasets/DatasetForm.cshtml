@@ -1,0 +1,23 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Datasets.DatasetFormModel
+@{
+    ViewData["Title"] = "Submit Dataset";
+}
+
+<h2>Submit Dataset</h2>
+
+<form method="post">
+    <div>
+        <label for="SelectedUserId">Select User:</label>
+        <select asp-for="SelectedUserId" asp-items="Model.Users"></select>
+    </div>
+    <div>
+        <label for="SelectedCollabId">Select Collaboration:</label>
+        <select asp-for="SelectedCollabId" asp-items="Model.Collaborations"></select>
+    </div>
+    <div>
+        <label for="CsvData">CSV Data:</label>
+        <textarea asp-for="CsvData" rows="10" cols="50"></textarea>
+    </div>
+    <input type="submit" value="Submit" />
+</form>

@@ -1,0 +1,42 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.KnowledgeItems.AddKnowledgeCategoryModel
+@{
+}
+<h1>Add Knowledge Item Category</h1>
+
+<form method="post">
+    <input type="text" asp-for="NewKnowledgeItemCategory.CategoryName" placeholder="Add Category" />
+    <span asp-validation-for="NewKnowledgeItemCategory.CategoryName" class="text-danger"></span>
+    <br />
+    <input type="submit" value="Add Category" class="btn-outline-primary" />
+</form>
+
+<h2 class="h2">Knowledge Categories</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Category Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string sqlQuery = @"
+        SELECT
+        CategoryName
+        FROM
+        KnowledgeItemCategory";
+
+            // Assuming DBClass.GeneralReaderQuery(sqlQuery) is your method to execute SQL and get the reader
+            SqlDataReader reader = DBClass.GeneralReaderQuery(sqlQuery);
+            while (reader.Read())
+            {
+                <tr>
+                    <td>@reader["CategoryName"].ToString()</td>
+                </tr>
+            }
+            reader.Close(); // Don't forget to close the reader
+        }
+    </tbody>
+</table>

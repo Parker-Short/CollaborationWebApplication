@@ -1,0 +1,349 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.Collaboration.CollabDashboardModel
+@{
+}
+<h1>@Model.CollabName Dashboard</h1>
+
+<!-- Displaying collaboration details -->
+<div>
+    <h4>Collaboration Details</h4>
+    <p>ID: @Model.CollabID</p>
+    <p>Name: @Model.CollabName</p>
+</div>
+<br />
+  
+
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>User:</th>
+            <th>Content:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string chatQuery = @"
+        SELECT
+        UserData.UserID,
+        UserData.FirstName + ' ' + UserData.LastName AS UserName,
+        Chat.Content
+        FROM Chat
+        INNER JOIN UserData ON Chat.UserID = UserData.UserID
+        WHERE Chat.CollabID =" + @Model.CollabID + ";";
+
+            SqlDataReader chatReader = DBClass.GeneralReaderQuery(chatQuery);
+            //Creates reader for the chat
+            while (chatReader.Read())
+            {
+                <tr>
+                    <td>@chatReader["UserName"]</td>
+                    <td>@chatReader["Content"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@* <form method="post" asp-page-handler="AddChat">
+    <input type="hidden" name="CollabID" value="@Model.CollabID" />
+    <input type="input" asp-for="NewChat.UserID" placeholder="User ID" />
+    <input type="input" asp-for="NewChat.Content" placeholder="Place content here" />
+
+    <input type="submit" class="btn btn-primary" />
+</form> *@
+
+
+<form method="post" asp-page-handler="AddChat">
+    <input type="hidden" asp-for="CollabID" />
+    <div class="form-group">
+        <label for="userId">UserID:</label>
+        <select id="userId" asp-for="NewChat.UserID" class="form-control">
+            <option value="" disabled selected>User</option>
+            @foreach (var user in Model.CollaborationUsers)
+            {
+                <option value="@user.Value">@user.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="NewChat.Content">Content</label>
+        <textarea asp-for="NewChat.Content" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-dark">Send chat</button>
+</form>
+
+<!--ADD USER TABLE AND BUTTON-->
+<br />
+ 
+<h2>Users</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string userQuery = $@"
+        SELECT
+        UserData.UserID,
+        UserData.FirstName,
+        UserData.LastName
+        FROM
+        UserData
+        INNER JOIN
+        CollabUser ON UserData.UserID = CollabUser.UserID
+        WHERE
+        CollabUser.CollabID = {Model.CollabID};";
+
+            SqlDataReader CollabUserReader = DBClass.GeneralReaderQuery(userQuery);
+
+            while (CollabUserReader.Read())
+            {
+                <tr>
+                    <td>@CollabUserReader["FirstName"]</td>
+                    <td>@CollabUserReader["LastName"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<!-- Form for adding a user -->
+<form method="post" asp-page-handler="AddUser">
+    <input type="hidden" name="CollabID" value="@Model.CollabID" />
+    <div class="form-group">
+        <label for="userId">UserID:</label>
+        <select id="userId" name="UserID" class="form-control">
+            <option value="" disabled selected>Select User</option>
+            @foreach (var user in Model.AvailableUsers)
+            {
+                <option value="@user.Value">@user.Text</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-dark">Add User</button>
+    </div>
+</form>
+<br />
+
+<!--ADD KNOWLEDGE ITEM TABLE AND BUTTON-->
+<br />
+<h2>Knowledge Items</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Title:</th>
+            <th>Information:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string knowledgeQuery = $@"
+        SELECT
+        CollabKnowledge.CollabID,
+        CollabKnowledge.KnowledgeItemID,
+        KnowledgeItem.KnowledgeTitle,
+        KnowledgeItem.KnowledgeInformation
+        FROM
+        KnowledgeItem
+        INNER JOIN
+        CollabKnowledge ON KnowledgeItem.KnowledgeItemID = CollabKnowledge.KnowledgeItemID
+        WHERE
+        CollabKnowledge.CollabID = {Model.CollabID};";
+
+            SqlDataReader CollabKnowledgeReader = DBClass.GeneralReaderQuery(knowledgeQuery);
+
+            while (CollabKnowledgeReader.Read())
+            {
+                <tr>
+                    <td>@CollabKnowledgeReader["KnowledgeTitle"]</td>
+                    <td>@CollabKnowledgeReader["KnowledgeInformation"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Form for adding a knowledge item -->
+<form method="post" asp-page-handler="AddKnowledgeItem">
+    <input type="hidden" name="CollabID" value="@Model.CollabID" />
+    <div class="form-group">
+        <label for="knowledgeItemId">KnowledgeItemID:</label>
+        <select id="knowledgeItemId" name="KnowledgeItemID" class="form-control">
+            <option value="" disabled selected>Select a KnowledgeItem</option>
+            @foreach (var item in Model.AvailableKnowledgeItems)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-dark">Add Knowledge Item</button>
+    </div>
+</form>
+<br />
+
+
+<!--ADD PLAN TABLE AND BUTTON-->
+<br />
+<h2>Plans</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Name:</th>
+            <th>Content:</th>
+            <th>Created By:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string planQuery = $@"
+        SELECT
+        PlanData.PlanID,
+        PlanData.PlanName,
+        PlanData.Content,
+        UserData.FirstName + ' ' + UserData.LastName AS CreatedBy
+        FROM
+        PlanData
+        INNER JOIN
+        CollabPlan ON PlanData.PlanID = CollabPlan.PlanID
+        INNER JOIN
+        UserData ON PlanData.UserID = UserData.UserID
+        WHERE
+        CollabPlan.CollabID = {Model.CollabID};";
+
+            SqlDataReader CollabPlanReader = DBClass.GeneralReaderQuery(planQuery);
+
+            while (CollabPlanReader.Read())
+            {
+                <tr>
+                    <td>@CollabPlanReader["PlanName"]</td>
+                    <td>@CollabPlanReader["Content"]</td>
+                    <td>@CollabPlanReader["CreatedBy"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Form for adding a plan -->
+<form method="post" asp-page-handler="AddPlan">
+    <input type="hidden" name="CollabID" value="@Model.CollabID" />
+    <div class="form-group">
+        <label for="planId">PlanID:</label>
+        <select id="planId" name="PlanID" class="form-control">
+        <option value="" disabled selected>Select Plan</option>
+            @foreach (var plan in Model.AvailablePlans)
+            {
+                <option value="@plan.Value">@plan.Text</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-dark">Add Plan</button>
+    </div>
+</form>
+
+
+<!--ADD SWOT TABLE AND BUTTON-->
+<br />
+<h2>SWOT Analyses</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Swot Name</th>
+            <th>Strengths</th>
+            <th>Weaknesses</th>
+            <th>Opportunities</th>
+            <th>Threats</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string swotQuery = $@"
+        SELECT Swot.SwotName, Swot.Strength, Swot.Weakness, Swot.Opportunity, Swot.Threat
+        FROM Swot
+        INNER JOIN CollabSwot ON Swot.SwotID = CollabSwot.SwotID
+        WHERE CollabSwot.CollabID = {Model.CollabID};";
+
+            SqlDataReader swotReader = DBClass.GeneralReaderQuery(swotQuery);
+
+            while (swotReader.Read())
+            {
+                <tr>
+                    <td>@swotReader["SwotName"]</td>
+                    <td>@swotReader["Strength"]</td>
+                    <td>@swotReader["Weakness"]</td>
+                    <td>@swotReader["Opportunity"]</td>
+                    <td>@swotReader["Threat"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Form for adding a SWOT analysis -->
+<form method="post" asp-page-handler="AddSwot">
+    <input type="hidden" name="CollabID" value="@Model.CollabID" />
+    <div class="form-group">
+        <label for="swotId">SWOT Analysis:</label>
+        <select id="swotId" name="SwotID" class="form-control">
+            <option value="" disabled selected>Select a SWOT Analysis</option>
+            @foreach (var swot in Model.AvailableSwots)
+            {
+                <option value="@swot.Value">@swot.Text</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-dark">Add SWOT Analysis</button>
+    </div>
+</form>
+<br />
+
+<!--ADD USER TABLE AND BUTTON-->
+<br />
+<h2>Datasets</h2>
+@{
+    string datasetQuery = $@"
+    SELECT Dataset.DatasetID, Dataset.DataValues
+    FROM Dataset
+    INNER JOIN CollabData ON Dataset.DatasetID = CollabData.DatasetID
+    WHERE CollabData.CollabID = {Model.CollabID};";
+
+    SqlDataReader datasetReader = DBClass.GeneralReaderQuery(datasetQuery);
+
+    while (datasetReader.Read())
+    {
+        <h3>Dataset @datasetReader["DatasetID"]</h3>
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    @if (!string.IsNullOrEmpty(datasetReader["DataValues"].ToString()))
+                    {
+                        var headerRow = datasetReader["DataValues"].ToString().Split('\n')[0].Split(',');
+                        foreach (var header in headerRow)
+                        {
+                            <th>@header</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var csvData = datasetReader["DataValues"].ToString();
+                    var rows = csvData.Split('\n');
+                    for (int i = 1; i < rows.Length; i++) // Start at 1 to skip header row
+                    {
+                        var cells = rows[i].Split(',');
+                        <tr>
+                            @foreach (var cell in cells)
+                            {
+                                <td>@cell</td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <br />
+    }
+}

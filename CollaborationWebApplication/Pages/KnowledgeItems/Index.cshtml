@@ -1,0 +1,91 @@
+﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
+@model CollaborationWebApplication.Pages.KnowledgeItems.IndexModel
+@{
+}
+
+<h2 class="h2">Knowledge Items:</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Title:</th>
+            <th>Created By:</th>
+            <th>Information:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string sqlQuery = @"
+        SELECT
+        UserData.FirstName + ' ' + UserData.LastName AS UserName,
+        KnowledgeItem.KnowledgeTitle,
+        KnowledgeItem.KnowledgeItemID,
+        KnowledgeItem.KnowledgeInformation
+        FROM
+        KnowledgeItem
+        INNER JOIN
+        UserData ON KnowledgeItem.UserID = UserData.UserID;
+        ";
+
+            //Create new reader for Knowledge and Users
+            SqlDataReader KnowledgeReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+            while (KnowledgeReader.Read())
+            {
+                <tr>
+                    <td>@KnowledgeReader["KnowledgeTitle"]</td>
+                    <td>@KnowledgeReader["UserName"]</td>
+                    <td>@KnowledgeReader["KnowledgeInformation"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<a class="btn btn-primary" asp-page="AddKnowledgeItems">Add a new knowledge Item -></a>
+
+<a class="btn btn-primary" asp-page="AddKnowledgeCategory">Add a new Knowledge Item Category -></a>
+
+<br />
+
+<h2 class="h2">Swot Analyses:</h2>
+<table class="table table-bordered table-responsive table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Swot Name:</th>
+            <th>Strength:</th>
+            <th>Weakness:</th>
+            <th>Opportunity:</th>
+            <th>Threat:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string swotQuery = @"
+        SELECT
+        SwotID, SwotName, Strength, Weakness, Opportunity, Threat, UserData.FirstName + ' ' + UserData.LastName AS UserName
+        FROM Swot
+        INNER JOIN UserData
+        ON Swot.UserID = UserData.UserID;
+        ";
+
+            //Create new reader for Knowledge and Users
+            SqlDataReader SwotReader = DBClass.GeneralReaderQuery(swotQuery);
+
+            while (SwotReader.Read())
+            {
+                <tr>
+                    <td>@SwotReader["SwotName"]</td>
+                    <td>@SwotReader["Strength"]</td>
+                    <td>@SwotReader["Weakness"]</td>
+                    <td>@SwotReader["Opportunity"]</td>
+                    <td>@SwotReader["Threat"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" asp-page="AddSwotAnalysis"> Add a SWOT type Knowledge Item-></a>

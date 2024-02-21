@@ -1,0 +1,83 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+    position: relative;
+}
+
+body {
+    margin-bottom: 60px;
+    min-height: 100vh;
+    background-image: linear-gradient( 174.2deg, rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );
+}
+
+.navbar {
+    background-color: #333232;
+    color: #fff;
+    margin: 0;
+    padding: 1%;
+    top: 0;
+    width: 100vw;
+}
+
+    .navbar ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .navbar li {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    .navbar a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px;
+        position: relative;
+    }
+
+        .navbar a::after {
+            content: '';
+            width: 0;
+            height: 3px;
+            background: #7f55a6;
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            transition: 0.5s;
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+
+.navbar-right:last-child {
+    float: right; /* Float the button container to the right */
+}
+
+#userId {
+    width:max-content;
+}
+
+#knowledgeItemId {
+    width: max-content;
+}
+
+#planId {
+    width: max-content;
+}
+
+#swotId {
+    width: max-content;
+}

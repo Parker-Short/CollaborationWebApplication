@@ -1,0 +1,27 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Users.AddUserModel
+@{
+}
+
+<h1>Add User</h1>
+
+<form asp-page="AddUser">
+    <input type="text" asp-for="NewUser.FirstName" placeholder="First Name" />
+    <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.LastName" placeholder="Last Name" />
+    <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Email" placeholder="Email Address" />
+    <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Phone" placeholder="Phone Number" />
+    <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Address" placeholder="Address" />
+    <span asp-validation-for="NewUser.Address" class="text-danger"></span>
+    <br />
+    <input type="submit" value="Create User" class="btn-outline-primary" />
+    <button class="btn-outline-secondary" asp-page="AddUser" asp-page-handler="PopulateHandler" formnovalidate>Populate</button>
+</form>
+

@@ -1,0 +1,32 @@
+﻿@page
+@model CollaborationWebApplication.Pages.KnowledgeItems.AddKnowledgeItemsModel
+@{
+}
+
+<form asp-page-handler="AddKnowledgeItemHandler" asp-page="AddKnowledgeItem">
+
+    <input type="text" asp-for="NewKnowledgeItem.KnowledgeTitle" placeholder="Title" />
+    <span asp-validation-for="NewKnowledgeItem.KnowledgeTitle" class="text-danger"></span>
+    <br />
+
+    <input type="text" asp-for="NewKnowledgeItem.KnowledgeSubject" placeholder="Subject" />
+    <span asp-validation-for="NewKnowledgeItem.KnowledgeSubject" class="text-danger"></span>
+    <br />
+
+    <input type="text" asp-for="NewKnowledgeItem.KnowledgeInformation" placeholder="Information" />
+    <span asp-validation-for="NewKnowledgeItem.KnowledgeInformation" class="text-danger"></span>
+    <br />
+
+    <select asp-for="NewKnowledgeItem.KnowledgeCategoryID" asp-items="Model.KnowledgeItemCategory" class="form-select">
+        <option value="">Select Category</option>
+    </select>
+    <br />
+
+
+    <select asp-for="NewKnowledgeItem.UserID" asp-items="Model.UserList" class="form-select">
+        <option value="">Select User</option>
+    </select>
+    <br /><br />
+
+    <input type="submit" value="Create Knowledge" class="btn-outline-primary" />
+</form>
