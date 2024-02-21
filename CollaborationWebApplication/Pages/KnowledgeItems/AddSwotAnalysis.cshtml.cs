@@ -64,9 +64,26 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
                 return Page();
             }
 
-            // Insert data into Swot table
-            string sqlInsertSwot = $"INSERT INTO Swot (SwotName, Strength, Weakness, Opportunity, Threat, UserID) VALUES ('{NewSwot.SwotName}','{NewSwot.Strength}', '{NewSwot.Weakness}', '{NewSwot.Opportunity}', '{NewSwot.Threat}', {UserID})";
-            DBClass.InsertQuery(sqlInsertSwot);
+            // Parameterized SQL Insert Query
+            string sqlInsertSwot = @"
+            INSERT INTO Swot 
+            (SwotName, Strength, Weakness, Opportunity, Threat, UserID) 
+            VALUES 
+            (@SwotName, @Strength, @Weakness, @Opportunity, @Threat, @UserID)";
+
+            // Create a dictionary for the parameters
+            var parameters = new Dictionary<string, object>
+            {
+                { "@SwotName", NewSwot.SwotName },
+                { "@Strength", NewSwot.Strength },
+                { "@Weakness", NewSwot.Weakness },
+                { "@Opportunity", NewSwot.Opportunity },
+                { "@Threat", NewSwot.Threat },
+                { "@UserID", UserID }
+            };
+
+            // Execute the SQL command with parameters
+            DBClass.ExecuteSqlCommand(sqlInsertSwot, parameters);
 
             return RedirectToPage("Index");
         }

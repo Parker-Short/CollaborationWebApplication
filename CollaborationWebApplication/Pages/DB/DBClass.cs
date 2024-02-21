@@ -13,6 +13,24 @@ namespace CollaborationWebApplication.Pages.DB
         // DB Connection String
         private static readonly string CollabAppString = "server=Localhost;Database=Lab2;Trusted_Connection=True";
 
+        //METHOD TO TEST GENERAL INSERT + PARAMETERS
+
+        public static void ExecuteSqlCommand(string sqlQuery, Dictionary<string, object> parameters)
+        {
+            using (var connection = new SqlConnection(CollabAppString))
+            {
+                using (var command = new SqlCommand(sqlQuery, connection))
+                {
+                    foreach (var param in parameters)
+                    {
+                        command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                    }
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
 
 
         // General Reader
@@ -46,60 +64,6 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdUserRead.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
-
-        // SINGLE USER READER --- NOT CURRENTLY IN USE
-        public static SqlDataReader SingleUserReader(int UserID)
-        {
-            var connection = new SqlConnection(CollabAppString);
-            var cmdUserRead = new SqlCommand($"SELECT * FROM UserData WHERE UserID = {UserID}", connection);
-            connection.Open();
-            return cmdUserRead.ExecuteReader(CommandBehavior.CloseConnection);
-        }
-
-        // UPDATE USER --- NOT CURRENTLY IN USE
-        public static void UpdateUser(User p)
-        {
-            using (var connection = new SqlConnection(CollabAppString))
-            {
-                var sqlQuery = $@"
-                    UPDATE UserData SET 
-                        FirstName = '{p.FirstName.Replace("'", "''")}',
-                        LastName = '{p.LastName.Replace("'", "''")}',
-                        Email = '{p.Email.Replace("'", "''")}',
-                        Phone = '{p.Phone.Replace("'", "''")}',
-                        Address = '{p.Address.Replace("'", "''")}' 
-                    WHERE UserID = {p.UserID}";
-
-                using (var cmdUserRead = new SqlCommand(sqlQuery, connection))
-                {
-                    connection.Open();
-                    cmdUserRead.ExecuteNonQuery();
-                }
-            }
-        }
-
-        // INSERT USER DATA -- CHANGE TO GENERAL INSERT
-        public static void InsertUserData(User p)
-        {
-            using (var connection = new SqlConnection(CollabAppString))
-            {
-                var sqlQuery = $@"
-                    INSERT INTO UserData (FirstName, LastName, Email, Phone, Address) VALUES (
-                        '{p.FirstName.Replace("'", "''")}',
-                        '{p.LastName.Replace("'", "''")}',
-                        '{p.Email.Replace("'", "''")}',
-                        '{p.Phone.Replace("'", "''")}',
-                        '{p.Address.Replace("'", "''")}')";
-
-                using (var cmdUserRead = new SqlCommand(sqlQuery, connection))
-                {
-                    connection.Open();
-                    cmdUserRead.ExecuteNonQuery();
-                }
-            }
-        }
-
-
         // INSERT KNOWLEDGE ITEM CATEGORY DATA -- CHANGE TO GENERAL INSERT
         public static void InsertKnowledgeCategory(KnowledgeItemCategory k)
         {
@@ -118,26 +82,6 @@ namespace CollaborationWebApplication.Pages.DB
             }
         }
 
-
-        // SINGLE PLAN READER
-        public static SqlDataReader SinglePlanReader(int PlanID)
-        {
-            var connection = new SqlConnection(CollabAppString);
-            var cmdUserRead = new SqlCommand($"SELECT * FROM PlanData WHERE PlanID = {PlanID}", connection);
-            connection.Open();
-            return cmdUserRead.ExecuteReader(CommandBehavior.CloseConnection);
-        }
-
-        //UPDATE PLAN
-        public static void UpdatePlan(Plan p)
-        {
-            String sqlQuery = "Update PlanData SET ";
-
-
-        }
-
-        // New Methods for DBClass.cs
-        // Clear-Text Login
         // Parameterized Login
         // Creating a User and Login with Password Hashing
 
@@ -159,7 +103,6 @@ namespace CollaborationWebApplication.Pages.DB
 
             return rowCount;
         }
-
 
 
         public static int SecureLogin(string Username, string Password)
@@ -185,62 +128,5 @@ namespace CollaborationWebApplication.Pages.DB
             return rowCount;
         }
 
-
-
-        //public static bool HashedParameterLogin(string Username, string Password)
-        //{
-        //    string loginQuery =
-        //        "SELECT Password FROM HashedCredentials WHERE Username = @Username";
-
-        //    SqlCommand cmdLogin = new SqlCommand();
-        //    cmdLogin.Connection = CollabAppConnection;
-        //    cmdLogin.Connection.ConnectionString = CollabAppString;
-
-        //    cmdLogin.CommandText = loginQuery;
-        //    cmdLogin.Parameters.AddWithValue("@Username", Username);
-
-        //    cmdLogin.Connection.Open();
-
-        //    // ExecuteScalar() returns back data type Object
-        //    // Use a typecast to convert this to an int.
-        //    // Method returns first column of first row.
-        //    SqlDataReader hashReader = cmdLogin.ExecuteReader();
-        //    if (hashReader.Read())
-        //    {
-        //        string correctHash = hashReader["Password"].ToString();
-
-        //        if (PasswordHash.ValidatePassword(Password, correctHash))
-        //        {
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
-
-
-
-        //public static void CreateHashedUser(string Username, string Password)
-        //{
-        //    string loginQuery =
-        //        "INSERT INTO HashedCredentials (Username,Password) values (@Username, @Password)";
-
-        //    SqlCommand cmdLogin = new SqlCommand();
-        //    cmdLogin.Connection = CollabAppConnection;
-        //    cmdLogin.Connection.ConnectionString = CollabAppString;
-
-        //    cmdLogin.CommandText = loginQuery;
-        //    cmdLogin.Parameters.AddWithValue("@Username", Username);
-        //    cmdLogin.Parameters.AddWithValue("@Password", PasswordHash.HashPassword(Password));
-
-        //    cmdLogin.Connection.Open();
-
-        //    // ExecuteScalar() returns back data type Object
-        //    // Use a typecast to convert this to an int.
-        //    // Method returns first column of first row.
-        //    cmdLogin.ExecuteNonQuery();
-
-        //}
     }
 }

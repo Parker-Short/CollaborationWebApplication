@@ -79,9 +79,25 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
                 return Page();
             }
 
-            string sqlInsertQuery = $"INSERT INTO KnowledgeItem (KnowledgeTitle, KnowledgeSubject, KnowledgeInformation, KnowledgeCategoryID, UserID) VALUES ('{NewKnowledgeItem.KnowledgeTitle}', '{NewKnowledgeItem.KnowledgeSubject}', '{NewKnowledgeItem.KnowledgeInformation}', {NewKnowledgeItem.KnowledgeCategoryID}, {NewKnowledgeItem.UserID})";
+            // Parameterized SQL Insert Query
+            string sqlInsertQuery = @"
+            INSERT INTO KnowledgeItem 
+            (KnowledgeTitle, KnowledgeSubject, KnowledgeInformation, KnowledgeCategoryID, UserID) 
+            VALUES 
+            (@KnowledgeTitle, @KnowledgeSubject, @KnowledgeInformation, @KnowledgeCategoryID, @UserID)";
 
-            DBClass.InsertQuery(sqlInsertQuery);
+            // Create a dictionary for the parameters
+            var parameters = new Dictionary<string, object>
+            {
+                { "@KnowledgeTitle", NewKnowledgeItem.KnowledgeTitle },
+                { "@KnowledgeSubject", NewKnowledgeItem.KnowledgeSubject },
+                { "@KnowledgeInformation", NewKnowledgeItem.KnowledgeInformation },
+                { "@KnowledgeCategoryID", NewKnowledgeItem.KnowledgeCategoryID },
+                { "@UserID", NewKnowledgeItem.UserID }
+            };
+
+            // Execute the SQL command with parameters
+            DBClass.ExecuteSqlCommand(sqlInsertQuery, parameters);
             return RedirectToPage("Index");
         }
     }

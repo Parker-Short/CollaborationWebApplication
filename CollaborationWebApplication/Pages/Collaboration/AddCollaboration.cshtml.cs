@@ -30,12 +30,22 @@ namespace CollaborationWebApplication.Pages.Collaboration
             {
                 return Page();
             }
+            else
+            {
+                string sqlQuery = @"
+                INSERT INTO Collaboration (CollabName) VALUES (@CollabName)";
+
+                var parameters = new Dictionary<string, object>
+                {
+                    {"@CollabName", NewCollab.CollabName }
+                };
+
+                DBClass.ExecuteSqlCommand(sqlQuery, parameters);
+
+                return RedirectToPage("Index");
 
 
-            string sqlInsertQuery = $"INSERT INTO Collaboration (CollabName) VALUES ('{NewCollab.CollabName}')";
-            DBClass.InsertQuery(sqlInsertQuery);
-
-            return RedirectToPage("Index");
+            }
         }
     }
 }

@@ -31,10 +31,24 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
             if (!ModelState.IsValid)
             {
                 return Page();
+                ViewData["ErrorMessage"] = "Please enter a category";
+            }
+            else
+            {
+                string sqlQuery = @"
+                INSERT INTO KnowledgeItemCategory (CategoryName) VALUES (@CategoryName)";
+
+                var parameters = new Dictionary<string, object>
+                {
+                    {"@CategoryName", NewKnowledgeItemCategory.CategoryName }
+                };
+
+                DBClass.ExecuteSqlCommand(sqlQuery, parameters);
+
+                return RedirectToPage("Index");
             }
 
-            DBClass.InsertKnowledgeCategory(NewKnowledgeItemCategory);
-            return RedirectToPage("Index"); //Returns user to the main page for Knowledge Items
+        
         }
     }
 }
