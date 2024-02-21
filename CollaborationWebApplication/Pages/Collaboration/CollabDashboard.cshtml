@@ -4,17 +4,22 @@
 @model CollaborationWebApplication.Pages.Collaboration.CollabDashboardModel
 @{
 }
-<h1>@Model.CollabName Dashboard</h1>
 
-<!-- Displaying collaboration details -->
-<div>
-    <h4>Collaboration Details</h4>
-    <p>ID: @Model.CollabID</p>
-    <p>Name: @Model.CollabName</p>
-</div>
+<!--Reading name from collab table and displaying as header-->
+@{
+    string nameQuery = @"SELECT CollabName FROM Collaboration WHERE CollabID =" + Model.CollabID + ";";
+    string collabName = "";
+    using SqlDataReader nameReader = DBClass.GeneralReaderQuery(nameQuery);
+    {
+        if (nameReader.Read()){
+            collabName = nameReader["CollabName"].ToString();
+        }
+    }
+    <h1>@collabName Dashboard</h1>
+}
+
 <br />
-  
-
+<br />
 <table class="table table-bordered table-responsive table-striped table-hover">
     <thead>
         <tr>
@@ -138,6 +143,7 @@
         <tr>
             <th>Title:</th>
             <th>Information:</th>
+            <th>Created By:</th>
         </tr>
     </thead>
     <tbody>
@@ -147,11 +153,14 @@
         CollabKnowledge.CollabID,
         CollabKnowledge.KnowledgeItemID,
         KnowledgeItem.KnowledgeTitle,
-        KnowledgeItem.KnowledgeInformation
+        KnowledgeItem.KnowledgeInformation,
+        UserData.FirstName + ' ' + UserData.LastName AS CreatedBy
         FROM
         KnowledgeItem
         INNER JOIN
         CollabKnowledge ON KnowledgeItem.KnowledgeItemID = CollabKnowledge.KnowledgeItemID
+        INNER JOIN
+        UserData ON KnowledgeItem.UserID = UserData.UserID
         WHERE
         CollabKnowledge.CollabID = {Model.CollabID};";
 
@@ -162,6 +171,7 @@
                 <tr>
                     <td>@CollabKnowledgeReader["KnowledgeTitle"]</td>
                     <td>@CollabKnowledgeReader["KnowledgeInformation"]</td>
+                    <td>@CollabKnowledgeReader["CreatedBy"]</td>
                 </tr>
             }
         }
@@ -256,14 +266,24 @@
             <th>Weaknesses</th>
             <th>Opportunities</th>
             <th>Threats</th>
+            <th>Created By:</th>
         </tr>
     </thead>
     <tbody>
         @{
             string swotQuery = $@"
-        SELECT Swot.SwotName, Swot.Strength, Swot.Weakness, Swot.Opportunity, Swot.Threat
+        SELECT 
+        Swot.SwotName,
+        Swot.Strength, 
+        Swot.Weakness, 
+        Swot.Opportunity, 
+        Swot.Threat,
+        UserData.FirstName + ' ' + UserData.LastName AS CreatedBy 
         FROM Swot
-        INNER JOIN CollabSwot ON Swot.SwotID = CollabSwot.SwotID
+        INNER JOIN 
+        CollabSwot ON Swot.SwotID = CollabSwot.SwotID
+        INNER JOIN
+        UserData ON Swot.UserID = UserData.UserID
         WHERE CollabSwot.CollabID = {Model.CollabID};";
 
             SqlDataReader swotReader = DBClass.GeneralReaderQuery(swotQuery);
@@ -276,6 +296,7 @@
                     <td>@swotReader["Weakness"]</td>
                     <td>@swotReader["Opportunity"]</td>
                     <td>@swotReader["Threat"]</td>
+                    <td>@swotReader["CreatedBy"]</td>
                 </tr>
             }
         }

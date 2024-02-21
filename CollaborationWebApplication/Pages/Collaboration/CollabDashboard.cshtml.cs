@@ -21,7 +21,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
         [BindProperty]
         public int CollabID { get; set; }
         [BindProperty]
-        public string CollabName { get; set; }
+
  
 
         public List<SelectListItem> AvailableUsers { get; set; }
@@ -37,7 +37,6 @@ namespace CollaborationWebApplication.Pages.Collaboration
         public void OnGet(int collabID, string collabName)
         {
             CollabID = collabID;
-            CollabName = collabName;
 
             AvailableUsers = FetchAvailableUsers();
             AvailableKnowledgeItems = FetchAvailableKnowledgeItems();
@@ -167,35 +166,35 @@ namespace CollaborationWebApplication.Pages.Collaboration
         {
             string query = $"INSERT INTO CollabUser (UserID, CollabID) VALUES ({UserID}, {CollabID})";
             DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID, collabName = CollabName });
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
 
         public IActionResult OnPostAddKnowledgeItem(int KnowledgeItemID)
         {
             string query = $"INSERT INTO CollabKnowledge (KnowledgeItemID, CollabID) VALUES ({KnowledgeItemID}, {CollabID})";
             DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID, collabName = CollabName });
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
 
         public IActionResult OnPostAddPlan(int PlanID)
         {
             string query = $"INSERT INTO CollabPlan (PlanID, CollabID) VALUES ({PlanID}, {CollabID})";
             DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID, collabName = CollabName });
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
 
         public IActionResult OnPostAddSwot(int SwotID)
         {
             string query = $"INSERT INTO CollabSwot (SwotID, CollabID) VALUES ({SwotID}, {CollabID})";
             DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID, collabName = CollabName });
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
 
         public IActionResult OnPostAddChat()
         {
             string query = $"INSERT INTO Chat (Content, UserID, CollabID) VALUES ('{NewChat.Content}', {NewChat.UserID}, {CollabID})";
             DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID, collabName = CollabName });
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
     }
 }

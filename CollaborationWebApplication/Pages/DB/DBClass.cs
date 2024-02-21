@@ -47,7 +47,7 @@ namespace CollaborationWebApplication.Pages.DB
         }
 
 
-        // SINGLE USER READER --- USE IN PLAN INDEX
+        // SINGLE USER READER --- NOT CURRENTLY IN USE
         public static SqlDataReader SingleUserReader(int UserID)
         {
             var connection = new SqlConnection(CollabAppString);
@@ -78,7 +78,7 @@ namespace CollaborationWebApplication.Pages.DB
             }
         }
 
-        // INSERT USER DATA 
+        // INSERT USER DATA -- CHANGE TO GENERAL INSERT
         public static void InsertUserData(User p)
         {
             using (var connection = new SqlConnection(CollabAppString))
@@ -100,7 +100,7 @@ namespace CollaborationWebApplication.Pages.DB
         }
 
 
-        // INSERT KNOWLEDGE ITEM CATEGORY DATA
+        // INSERT KNOWLEDGE ITEM CATEGORY DATA -- CHANGE TO GENERAL INSERT
         public static void InsertKnowledgeCategory(KnowledgeItemCategory k)
         {
             using (var connection = new SqlConnection(CollabAppString))
