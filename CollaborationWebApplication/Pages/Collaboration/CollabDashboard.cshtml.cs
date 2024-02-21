@@ -5,16 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using CollaborationWebApplication.Pages.DB;
 
 namespace CollaborationWebApplication.Pages.Collaboration
 {
 
-    //BEGIN CHAT EDITS
-
-
-
-    //END CHAT EDITS
+    
 
     public class CollabDashboardModel : PageModel
     {
