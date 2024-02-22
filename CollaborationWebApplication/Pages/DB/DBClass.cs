@@ -8,6 +8,10 @@ namespace CollaborationWebApplication.Pages.DB
     public class DBClass
     {
 
+        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
+
+        
+
         public static SqlConnection CollabAppConnection = new SqlConnection();
 
         // DB Connection String
@@ -127,6 +131,55 @@ namespace CollaborationWebApplication.Pages.DB
 
             return rowCount;
         }
+
+        //New code for CreateHashUser
+        public static void CreateHashedUser(string Username, string Password)
+        {
+            string loginQuery =
+                "INSERT INTO HashedCredentials (Username,Password) values (@Username, @Password)";
+            SqlCommand cmdLogin = new SqlCommand();
+            cmdLogin.Connection = CollabAppConnection;
+            cmdLogin.Connection.ConnectionString = AuthConnString;
+
+            cmdLogin.CommandText = loginQuery;
+            cmdLogin.Parameters.AddWithValue("@Username", Username);
+            cmdLogin.Parameters.AddWithValue("@Password", PasswordHash.HashPassword(Password));
+
+            cmdLogin.Connection.Open();
+            //user typecast to return this to an int
+            //Method returns first column of first row
+            cmdLogin.ExecuteNonQuery();
+
+        }
+
+        public static bool HashedParameterLogin(string Username, string Password)
+        {
+            string loginQuery =
+                "SELECT Password FROM HashedCredentials WHERE Username = @Username";
+
+            SqlCommand cmdLogin = new SqlCommand();
+            cmdLogin.Connection = CollabAppConnection;
+            cmdLogin.Connection.ConnectionString = AuthConnString;
+
+            cmdLogin.CommandText = loginQuery;
+            cmdLogin.Parameters.AddWithValue("@Username", Username);
+
+            cmdLogin.Connection.Open();
+
+            SqlDataReader hashReader = cmdLogin.ExecuteReader();
+            if (hashReader.Read())
+            {
+                string correctHash = hashReader["Password"].ToString();
+
+                if (PasswordHash.ValidatePassword(Password, correctHash))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
     }
 }

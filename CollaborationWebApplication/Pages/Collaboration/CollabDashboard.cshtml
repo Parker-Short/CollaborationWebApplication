@@ -55,7 +55,7 @@
 <form method="post" asp-page-handler="AddChat">
     <input type="hidden" asp-for="CollabID" />
     <div class="form-group">
-        <label for="userId">UserID:</label>
+        <label for="userId"> </label>
         <select id="userId" asp-for="NewChat.UserID" class="form-control">
             <option value="" disabled selected>User</option>
             @foreach (var user in Model.CollaborationUsers)
