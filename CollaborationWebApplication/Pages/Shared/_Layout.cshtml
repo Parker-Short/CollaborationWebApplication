@@ -44,13 +44,16 @@
                         <li></li>
                     @if (Context.Session.GetString("username") == null)
                     {
-                        <a id="Login" class="btn-secondary rounded-pill" asp-area="" asp-page="/Login/SecureLogin">Log In</a>
-                    }
-                    else
-                    {
-                        <li>@Context.Session.GetString("username")</li>
-                        <a id="Logout" class="btn-secondary rounded-pill" asp-area="" asp-page="/Login/SecureLogin">Log Out</a>
-                    }
+                            <a id="Login" class="btn-secondary rounded-pill" asp-area="" asp-page="/Login/SecureLogin">Log In</a>
+                        }
+                        else
+                        {
+                            var LocalUser = Context.Session.GetString("username");
+                            <div class="user-info">
+                                <p id="username"> @LocalUser</p>
+                                <a id="Logout" class="btn-secondary rounded-pill" asp-area="" asp-page="/Login/SecureLogin">Log Out</a>
+                            </div>
+                        }
                     </ul>
                 </div>
             </div>

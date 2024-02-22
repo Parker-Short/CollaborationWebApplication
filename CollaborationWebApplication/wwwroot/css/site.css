@@ -36,17 +36,17 @@ body {
 
     .navbar li {
         display: inline-block;
-        margin-right: 20px;
+        margin-right: 10px;
     }
 
-    .navbar a {
+    .nav-item {
         color: #ffffff;
         text-decoration: none;
-        padding: 10px;
+        padding: 8px;
         position: relative;
     }
 
-        .navbar a::after {
+        .nav-item::after {
             content: '';
             width: 0;
             height: 3px;
@@ -57,7 +57,7 @@ body {
             transition: 0.5s;
         }
 
-        .navbar a:hover::after {
+        .nav-item:hover::after {
             width: 100%;
         }
 
@@ -66,8 +66,38 @@ body {
     float: right; /* Float the button container to the right */
 }
 
+#Login {
+    width: 100px; /* Or a desired value */
+    height: 50px; /* Or a desired value */
+    background-color: #333232; /* Or a desired color */
+    color: #fff; /* Or a desired color */
+    border: none; /* Remove default button border */
+    padding: 10px 20px; /* Add some padding */
+}
+    #Login:hover {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
 
-/**/
+.navbar-right p,
+.navbar-right a#Logout {
+    display: inline-block;
+}
+
+.navbar-right p{color: black;}
+#Logout {
+    width: 100px; /* Or a desired value */
+    height: 50px; /* Or a desired value */
+    background-color: #333232; /* Or a desired color */
+    color: #fff; /* Or a desired color */
+    border: none; /* Remove default button border */
+    padding: 10px 20px; /* Add some padding */
+}
+    #Logout:hover {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+
+/*COLLAB DASHBOARD CSS*/
 #userId {
     width:max-content;
 }
