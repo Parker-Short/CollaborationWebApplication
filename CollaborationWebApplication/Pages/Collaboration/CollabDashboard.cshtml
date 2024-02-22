@@ -51,14 +51,6 @@
     </tbody>
 </table>
 
-@* <form method="post" asp-page-handler="AddChat">
-    <input type="hidden" name="CollabID" value="@Model.CollabID" />
-    <input type="input" asp-for="NewChat.UserID" placeholder="User ID" />
-    <input type="input" asp-for="NewChat.Content" placeholder="Place content here" />
-
-    <input type="submit" class="btn btn-primary" />
-</form> *@
-
 
 <form method="post" asp-page-handler="AddChat">
     <input type="hidden" asp-for="CollabID" />
@@ -122,7 +114,7 @@
 <form method="post" asp-page-handler="AddUser">
     <input type="hidden" name="CollabID" value="@Model.CollabID" />
     <div class="form-group">
-        <label for="userId">UserID:</label>
+        <label for="userId"></label>
         <select id="userId" name="UserID" class="form-control">
             <option value="" disabled selected>Select User</option>
             @foreach (var user in Model.AvailableUsers)
@@ -182,7 +174,7 @@
 <form method="post" asp-page-handler="AddKnowledgeItem">
     <input type="hidden" name="CollabID" value="@Model.CollabID" />
     <div class="form-group">
-        <label for="knowledgeItemId">KnowledgeItemID:</label>
+        <label for="knowledgeItemId"> </label>
         <select id="knowledgeItemId" name="KnowledgeItemID" class="form-control">
             <option value="" disabled selected>Select a KnowledgeItem</option>
             @foreach (var item in Model.AvailableKnowledgeItems)
@@ -242,7 +234,7 @@
 <form method="post" asp-page-handler="AddPlan">
     <input type="hidden" name="CollabID" value="@Model.CollabID" />
     <div class="form-group">
-        <label for="planId">PlanID:</label>
+        <label for="planId"> </label>
         <select id="planId" name="PlanID" class="form-control">
         <option value="" disabled selected>Select Plan</option>
             @foreach (var plan in Model.AvailablePlans)
@@ -307,7 +299,7 @@
 <form method="post" asp-page-handler="AddSwot">
     <input type="hidden" name="CollabID" value="@Model.CollabID" />
     <div class="form-group">
-        <label for="swotId">SWOT Analysis:</label>
+        <label for="swotId"> </label>
         <select id="swotId" name="SwotID" class="form-control">
             <option value="" disabled selected>Select a SWOT Analysis</option>
             @foreach (var swot in Model.AvailableSwots)

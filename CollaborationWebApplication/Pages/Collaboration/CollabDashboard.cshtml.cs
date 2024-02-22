@@ -187,9 +187,22 @@ namespace CollaborationWebApplication.Pages.Collaboration
 
         public IActionResult OnPostAddChat()
         {
-            string query = $"INSERT INTO Chat (Content, UserID, CollabID) VALUES ('{NewChat.Content}', {NewChat.UserID}, {CollabID})";
-            DBClass.InsertQuery(query);
-            return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
+            // Prepare the parameterized SQL query
+            string sqlQuery = "INSERT INTO Chat (Content, UserID, CollabID) VALUES (@Content, @UserID, @CollabID)";
+
+            // Create a dictionary to hold the parameters
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "@Content", NewChat.Content },
+                { "@UserID", NewChat.UserID },
+                { "@CollabID", CollabID }
+            };
+
+            // Call the method to execute the command with parameters
+            DBClass.ExecuteSqlCommand(sqlQuery, parameters);
+
+            // Redirect to the specified page
+            return RedirectToPage("./CollabDashboard", new { collabID = CollabID });
         }
     }
 }
