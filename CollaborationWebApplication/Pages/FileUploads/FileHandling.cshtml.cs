@@ -29,7 +29,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
             }
 
             // Store the CSV data in TempData. If multiple files are uploaded, you might need to handle them separately.
-            TempData["CsvData"] = JsonConvert.SerializeObject(csvDataList);
+            //TempData["CsvData"] = JsonConvert.SerializeObject(csvDataList);
 
             return RedirectToPage("/Datasets/DatasetForm");
         }

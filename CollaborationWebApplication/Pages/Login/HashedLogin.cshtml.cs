@@ -11,18 +11,27 @@ namespace CollaborationWebApplication.Pages.Login
         [BindProperty]
         public string Password { get; set; }
 
-        public void OnGet()
+  
+        public IActionResult OnGet(String logout)
         {
+            if (logout == "true")
+            {
+                HttpContext.Session.Clear();
+                ViewData["LoginMessage"] = "Successfully Logged Out!";
+            }
+
+            return Page();
         }
 
-        public IActionResult OnPost()
+
+        public IActionResult OnPostLoginHandler()
         {
             if (DBClass.HashedParameterLogin(Username, Password))
             {
                 HttpContext.Session.SetString("username", Username);
                 ViewData["LoginMessage"] = "Login Successful!";
                 DBClass.CollabAppConnection.Close();
-                return Page();
+                return RedirectToPage("../Index");
             }
             else
             {
@@ -32,5 +41,12 @@ namespace CollaborationWebApplication.Pages.Login
             }
 
         }
+
+        public IActionResult OnPostLogoutHandler()
+        {
+            HttpContext.Session.Clear();
+            return Page();
+        }
+
     }
 }

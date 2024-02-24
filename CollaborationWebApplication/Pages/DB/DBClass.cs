@@ -15,7 +15,7 @@ namespace CollaborationWebApplication.Pages.DB
         public static SqlConnection CollabAppConnection = new SqlConnection();
 
         // DB Connection String
-        private static readonly string CollabAppString = "server=Localhost;Database=Lab2;Trusted_Connection=True";
+        private static readonly string CollabAppString = "server=Localhost;Database=Lab3;Trusted_Connection=True";
 
         //METHOD TO TEST GENERAL INSERT + PARAMETERS
 
@@ -149,6 +149,8 @@ namespace CollaborationWebApplication.Pages.DB
             //user typecast to return this to an int
             //Method returns first column of first row
             cmdLogin.ExecuteNonQuery();
+
+            string userQuery = "INSERT INTO UserData(Username, Password, Firstname, Lastname)";
 
         }
 

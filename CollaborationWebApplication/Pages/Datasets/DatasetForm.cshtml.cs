@@ -24,7 +24,7 @@ namespace CollaborationWebApplication.Pages.Datasets
             if (HttpContext.Session.GetString("username") == null)
             {
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
-                return RedirectToPage("/Login/DBLogin");
+                return RedirectToPage("/Login/HashedLogin");
             }
 
             // Populate Users from UserData

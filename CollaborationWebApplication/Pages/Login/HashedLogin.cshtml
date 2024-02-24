@@ -3,22 +3,36 @@
 @{
 }
 
-<form asp-page="HashedLogin">
-    <input asp-for="Username" class="form-control" placeholder="Enter Username" />
-    <br />
-    <label>Enter Password:</label>
-    <input asp-for="Password" class="form-control" type="password" />
-    <br />
-    <input type="submit" class="btn btn-primary" />
-</form>
-<br />
 @{
     if (HttpContext.Session.GetString("username") != null)
     {
-        <p class="text-success">@ViewData["LoginMessage"]</p>
+        <h4>Are you sure you want to log out?</h4>
+        <form asp-page="HashedLogin" asp-page-handler="LogoutHandler">
+            <input type="submit" class="btn btn-danger" value="Yes, Log me out" />
+        </form>
+
+    }
+    else if (HttpContext.Session.GetString("LoginError") != null) {
+        <p class="text-danger">@HttpContext.Session.GetString("LoginError")</p>
+
+        <form asp-page="HashedLogin" asp-page-handler="LoginHandler">
+            <input asp-for="Username" class="form-control" placeholder="Enter Username" />
+            <br />
+            <label>Enter Password:</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <br />
+            <input type="submit" class="btn btn-dark" />
+        </form>
     }
     else
     {
-        <p class="text-danger">@ViewData["LoginMessage"]</p>
+        <form asp-page="HashedLogin" asp-page-handler="LoginHandler">
+            <input asp-for="Username" class="form-control" placeholder="Enter Username" />
+            <br />
+            <label>Enter Password:</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <br />
+            <input type="submit" class="btn btn-dark" />
+        </form>
     }
 }

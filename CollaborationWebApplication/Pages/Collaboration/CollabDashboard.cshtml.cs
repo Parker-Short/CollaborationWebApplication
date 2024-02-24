@@ -26,11 +26,25 @@ namespace CollaborationWebApplication.Pages.Collaboration
         public List<SelectListItem> CollaborationUsers { get; set; }
 
         [BindProperty]
-        public DataClasses.Chat NewChat { get; set; }   
+        public DataClasses.Chat NewChat { get; set; }
 
+
+        public IActionResult OnGetSessionCheck()
+        {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("/Login/HashedLogin");
+            }
+            else
+            {
+                return Page();
+            }
+        }
 
         public void OnGet(int collabID, string collabName)
         {
+
             CollabID = collabID;
 
             AvailableUsers = FetchAvailableUsers();

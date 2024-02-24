@@ -23,6 +23,8 @@ namespace CollaborationWebApplication.Pages.Login
             DBClass.CreateHashedUser(Username, Password);
             DBClass.CollabAppConnection.Close();
 
+
+
             // Perform actual logic to check if user was successfully
             //  added in your projects but for demo purposes we can say:
 
