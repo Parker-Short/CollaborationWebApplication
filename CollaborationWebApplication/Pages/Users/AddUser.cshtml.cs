@@ -34,6 +34,9 @@ namespace CollaborationWebApplication.Pages.Users
             }
             else
             {
+
+
+
                 // Construct the parameterized SQL query
                 string sqlQuery = @"
             INSERT INTO UserData (FirstName, LastName, Email, Phone, Address) 
@@ -54,24 +57,6 @@ namespace CollaborationWebApplication.Pages.Users
 
                 return RedirectToPage("Index");
             }
-        }
-
-        public IActionResult OnPostPopulateHandler()
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.Clear(); // Causes Model Validation to be skipped & reset for the next entry
-            }
-
-            // Code to populate form with:
-            NewUser.FirstName = "John";
-            NewUser.LastName = "Doe";
-            NewUser.Email = "johndoe@example.com";
-            NewUser.Phone = "1234567890";
-            NewUser.Address = "123 Main St";
-            // End code population
-
-            return Page();
         }
 
     }

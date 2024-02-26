@@ -19,6 +19,21 @@ namespace CollaborationWebApplication.Pages.DB
 
         //METHOD TO TEST GENERAL INSERT + PARAMETERS
 
+
+        public static int FetchUserIDForUsername(string username)
+        {
+            string sqlQuery = "SELECT UserID FROM UserData WHERE Username = @Username"; // Adjust table/column names as necessary
+            using (var connection = new SqlConnection(CollabAppString)) // Ensure AuthConnString is correctly defined
+            using (var command = new SqlCommand(sqlQuery, connection))
+            {
+                command.Parameters.AddWithValue("@Username", username);
+                connection.Open();
+                object result = command.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : -1; // Return -1 or handle appropriately if user not found
+            }
+        }
+
+
         public static void ExecuteSqlCommand(string sqlQuery, Dictionary<string, object> parameters)
         {
             using (var connection = new SqlConnection(CollabAppString))
@@ -133,7 +148,7 @@ namespace CollaborationWebApplication.Pages.DB
         }
 
         //New code for CreateHashUser
-        public static void CreateHashedUser(string Username, string Password)
+        public static void CreateHashedUser(string Username, string Password, string FirstName, string LastName, string Email, string Phone, string Address)
         {
             string loginQuery =
                 "INSERT INTO HashedCredentials (Username,Password) values (@Username, @Password)";
@@ -150,7 +165,23 @@ namespace CollaborationWebApplication.Pages.DB
             //Method returns first column of first row
             cmdLogin.ExecuteNonQuery();
 
-            string userQuery = "INSERT INTO UserData(Username, Password, Firstname, Lastname)";
+            // Insert into UserDetails table in the lab3 database
+            string userDetailsQuery = "INSERT INTO UserData (Username, FirstName, LastName, Email, Phone, Address) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Address)";
+            using (SqlConnection collabConn = new SqlConnection(CollabAppString))
+            {
+                SqlCommand cmdUserDetails = new SqlCommand(userDetailsQuery, collabConn);
+                cmdUserDetails.Parameters.AddWithValue("@Username", Username);
+                cmdUserDetails.Parameters.AddWithValue("@FirstName", FirstName);
+                cmdUserDetails.Parameters.AddWithValue("@LastName", LastName);
+                cmdUserDetails.Parameters.AddWithValue("@Email", Email);
+                cmdUserDetails.Parameters.AddWithValue("@Phone", Phone);
+                cmdUserDetails.Parameters.AddWithValue("@Address", Address);
+                collabConn.Open();
+                cmdUserDetails.ExecuteNonQuery();
+                collabConn.Close();
+                
+            }
+            cmdLogin.Connection.Close();
 
         }
 
@@ -161,6 +192,7 @@ namespace CollaborationWebApplication.Pages.DB
 
             SqlCommand cmdLogin = new SqlCommand();
             cmdLogin.Connection = CollabAppConnection;
+            
             cmdLogin.Connection.ConnectionString = AuthConnString;
 
             cmdLogin.CommandText = loginQuery;
@@ -176,9 +208,23 @@ namespace CollaborationWebApplication.Pages.DB
                 if (PasswordHash.ValidatePassword(Password, correctHash))
                 {
                     return true;
+                    cmdLogin.Connection.Close();
+                    
                 }
             }
             return false;
+
+            cmdLogin.Connection.Close();
+        }
+
+
+        // General Reader
+        public static SqlDataReader GeneralReaderQueryAUTH(string sqlQuery)
+        {
+            var connection = new SqlConnection(AuthConnString);
+            var cmdGeneralRead = new SqlCommand(sqlQuery, connection);
+            connection.Open();
+            return cmdGeneralRead.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         }
 
 

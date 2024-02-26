@@ -64,6 +64,23 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
                 return Page();
             }
 
+            // Retrieve Username from session
+            string username = HttpContext.Session.GetString("username");
+            if (string.IsNullOrEmpty(username))
+            {
+                // Handle the case where the username is not in the session (user not logged in)
+                return RedirectToPage("/Login/HashedLogin");
+            }
+
+            // Fetch UserID based on Username
+            int userID = DBClass.FetchUserIDForUsername(username);
+            if (userID == -1)
+            {
+                // Handle the case where UserID couldn't be fetched
+                // This might involve logging the error and redirecting to an error page or login page
+                return RedirectToPage("/Login/HashedLogin");
+            }
+
             // Parameterized SQL Insert Query
             string sqlInsertSwot = @"
             INSERT INTO Swot 
@@ -79,7 +96,7 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
                 { "@Weakness", NewSwot.Weakness },
                 { "@Opportunity", NewSwot.Opportunity },
                 { "@Threat", NewSwot.Threat },
-                { "@UserID", UserID }
+                { "@UserID", userID }
             };
 
             // Execute the SQL command with parameters

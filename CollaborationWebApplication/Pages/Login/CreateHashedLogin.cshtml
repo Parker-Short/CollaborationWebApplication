@@ -2,20 +2,40 @@
 @model CollaborationWebApplication.Pages.Login.CreateHashedLoginModel
 @{
 }
-
+<h2 class="page-heading">Create an Account</h2>
 <form asp-page="CreateHashedLogin">
     <label>Enter New Username:</label>
     <input asp-for="Username" class="form-control" placeholder="Enter Username" />
+    <span asp-validation-for="Username" class="text-danger"></span>
+    @{
+        if (ViewData["UsernameError"] != null)
+    }
     <br />
     <label>Enter New User's Password:</label>
     <input asp-for="Password" class="form-control" type="password" />
+    <span asp-validation-for="Password" class="text-danger"></span>
     <br />
-
-    <input type="submit" class="btn btn-primary" />
+    <input type="text" asp-for="NewUser.FirstName" placeholder="First Name" />
+    <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.LastName" placeholder="Last Name" />
+    <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Email" placeholder="Email Address" />
+    <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Phone" placeholder="Phone Number" />
+    <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
+    <br />
+    <input type="text" asp-for="NewUser.Address" placeholder="Address" />
+    <span asp-validation-for="NewUser.Address" class="text-danger"></span>
+    <br />
+    <input type="submit" value="Create User" class="btn-outline-primary" />
 </form>
 @{
-    if (ViewData["UserCreate"] != null)
+    if (ViewData["UsernameError"] != null)
     {
-        <p class="text-success">@ViewData["UserCreate"]</p>
+        <div class="text-danger">@ViewData["UsernameError"]</div>
     }
 }
+

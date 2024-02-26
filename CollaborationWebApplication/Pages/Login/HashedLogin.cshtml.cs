@@ -17,7 +17,7 @@ namespace CollaborationWebApplication.Pages.Login
             if (logout == "true")
             {
                 HttpContext.Session.Clear();
-                ViewData["LoginMessage"] = "Successfully Logged Out!";
+
             }
 
             return Page();
@@ -41,6 +41,27 @@ namespace CollaborationWebApplication.Pages.Login
             }
 
         }
+
+        //public IActionResult OnPostLoginHandler()
+        //{
+        //    if (DBClass.HashedParameterLogin(Username, Password))
+        //    {
+        //        // After successful login, fetch the UserID for the Username
+        //        var userID = DBClass.FetchUserIDForUsername(Username); // Implement this method
+
+        //        // Store UserID and Username in the session
+        //        HttpContext.Session.SetInt32("UserID", userID);
+        //        HttpContext.Session.SetString("Username", Username);
+
+        //        return RedirectToPage("../Index");
+        //    }
+        //    else
+        //    {
+        //        ViewData["LoginMessage"] = "Username and/or Password Incorrect";
+        //        return Page();
+        //    }
+        //}
+
 
         public IActionResult OnPostLogoutHandler()
         {

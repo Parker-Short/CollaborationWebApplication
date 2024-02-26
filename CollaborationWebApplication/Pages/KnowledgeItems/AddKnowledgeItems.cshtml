@@ -3,7 +3,7 @@
 @{
 }
 
-<form asp-page-handler="AddKnowledgeItemHandler" asp-page="AddKnowledgeItem">
+<form asp-page-handler="AddKnowledgeItemHandler" method="post">
 
     <input type="text" asp-for="NewKnowledgeItem.KnowledgeTitle" placeholder="Title" />
     <span asp-validation-for="NewKnowledgeItem.KnowledgeTitle" class="text-danger"></span>
@@ -21,12 +21,6 @@
         <option value="">Select Category</option>
     </select>
     <br />
-
-
-    <select asp-for="NewKnowledgeItem.UserID" asp-items="Model.UserList" class="form-select">
-        <option value="">Select User</option>
-    </select>
-    <br /><br />
 
     <input type="submit" value="Create Knowledge" class="btn-outline-primary" />
 </form>

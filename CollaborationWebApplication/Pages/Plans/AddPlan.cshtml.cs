@@ -69,8 +69,24 @@ namespace CollaborationWebApplication.Pages.Plans
             {
                 return Page();
             }
+            // Retrieve Username from session
+            string username = HttpContext.Session.GetString("username");
+            if (string.IsNullOrEmpty(username))
+            {
+                // Handle the case where the username is not in the session (user not logged in)
+                return RedirectToPage("/Login/HashedLogin");
+            }
 
-            string sqlInsertQuery = $"INSERT INTO PlanData (PlanName, Content, UserID) VALUES ( '{NewPlan.PlanName}', '{NewPlan.Content}', {NewPlan.UserID})";
+            // Fetch UserID based on Username
+            int userID = DBClass.FetchUserIDForUsername(username);
+            if (userID == -1)
+            {
+                // Handle the case where UserID couldn't be fetched
+                // This might involve logging the error and redirecting to an error page or login page
+                return RedirectToPage("/Login/HashedLogin");
+            }
+
+            string sqlInsertQuery = $"INSERT INTO PlanData (PlanName, Content, UserID) VALUES ( '{NewPlan.PlanName}', '{NewPlan.Content}', {userID})";
 
             DBClass.InsertQuery(sqlInsertQuery);
 

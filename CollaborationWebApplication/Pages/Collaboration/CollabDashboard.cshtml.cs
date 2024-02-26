@@ -55,6 +55,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
         }
 
 
+
         private List<SelectListItem> FetchCollaborationUsers()
         {
             CollaborationUsers = new List<SelectListItem>();
@@ -199,24 +200,61 @@ namespace CollaborationWebApplication.Pages.Collaboration
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
 
+        //public IActionResult OnPostAddChat()
+        //{
+        //    // Prepare the parameterized SQL query
+        //    string sqlQuery = "INSERT INTO Chat (Content, UserID, CollabID) VALUES (@Content, @UserID, @CollabID)";
+
+        //    // Create a dictionary to hold the parameters
+        //    Dictionary<string, object> parameters = new Dictionary<string, object>
+        //    {
+        //        { "@Content", NewChat.Content },
+        //        { "@UserID", NewChat.UserID },
+        //        { "@CollabID", CollabID }
+        //    };
+
+        //    // Call the method to execute the command with parameters
+        //    DBClass.ExecuteSqlCommand(sqlQuery, parameters);
+
+        //    // Redirect to the specified page
+        //    return RedirectToPage("./CollabDashboard", new { collabID = CollabID });
+        //}
+
+
         public IActionResult OnPostAddChat()
         {
-            // Prepare the parameterized SQL query
-            string sqlQuery = "INSERT INTO Chat (Content, UserID, CollabID) VALUES (@Content, @UserID, @CollabID)";
-
-            // Create a dictionary to hold the parameters
-            Dictionary<string, object> parameters = new Dictionary<string, object>
+            // Retrieve Username from session
+            string username = HttpContext.Session.GetString("username");
+            if (string.IsNullOrEmpty(username))
             {
-                { "@Content", NewChat.Content },
-                { "@UserID", NewChat.UserID },
-                { "@CollabID", CollabID }
-            };
+                // Handle the case where the username is not in the session (user not logged in)
+                return RedirectToPage("/Login/HashedLogin");
+            }
 
-            // Call the method to execute the command with parameters
+            // Fetch UserID based on Username
+            int userID = DBClass.FetchUserIDForUsername(username);
+            if (userID == -1)
+            {
+                // Handle the case where UserID couldn't be fetched
+                // This might involve logging the error and redirecting to an error page or login page
+                return RedirectToPage("/Login/HashedLogin");
+            }
+
+            // Construct and execute the SQL command to insert the new chat message
+            string sqlQuery = "INSERT INTO Chat (Content, UserID, CollabID) VALUES (@Content, @UserID, @CollabID)";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@Content", NewChat.Content},
+                    {"@UserID", userID}, // Use the fetched UserID for the chat message
+                    {"@CollabID", CollabID }
+                };
+
             DBClass.ExecuteSqlCommand(sqlQuery, parameters);
 
-            // Redirect to the specified page
+            // Redirect back to the dashboard or wherever appropriate
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID });
         }
+
+
     }
 }
