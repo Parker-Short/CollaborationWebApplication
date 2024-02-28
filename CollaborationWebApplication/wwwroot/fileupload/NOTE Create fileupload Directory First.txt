@@ -1,0 +1,1 @@
+NOTE: Create a directory called "fileupload" in your wwwroot folder in your solution first. Then the File related razor pages will have a location to copy files to.

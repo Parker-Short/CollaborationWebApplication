@@ -2,36 +2,82 @@
 @model CollaborationWebApplication.Pages.Login.CreateHashedLoginModel
 @{
 }
-<h2 class="page-heading">Create an Account</h2>
-<form asp-page="CreateHashedLogin">
-    <label>Enter New Username:</label>
-    <input asp-for="Username" class="form-control" placeholder="Enter Username" />
-    <span asp-validation-for="Username" class="text-danger"></span>
-    @{
-        if (ViewData["UsernameError"] != null)
-    }
+
+<head>
+    <style>
+
+        .page-heading{
+            text-align: center;
+        }
+        .acct-container {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 34.37em;
+            position: relative;
+            margin: 3.12em auto;
+            padding: 3.12em 1.25em;
+            border-radius: 0.43em;
+            box-shadow: 0 1.25em 2.18em rgb(1, 28, 71, 0.3);
+        }
+
+        .form-control{
+            max-width: 50%;
+        }
+        .info-input{
+            max-width: 50%;
+        }
+
+        .button{
+            display: flex;
+            justify-content: center;
+        }
+        #create-user{
+            color: blue;
+            width: 20%;
+        }
+        
+    </style>
+</head>
+
+<div class="acct-container">
+    <h2 class="page-heading">Create an Account</h2>
     <br />
-    <label>Enter New User's Password:</label>
-    <input asp-for="Password" class="form-control" type="password" />
-    <span asp-validation-for="Password" class="text-danger"></span>
-    <br />
-    <input type="text" asp-for="NewUser.FirstName" placeholder="First Name" />
-    <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
-    <br />
-    <input type="text" asp-for="NewUser.LastName" placeholder="Last Name" />
-    <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
-    <br />
-    <input type="text" asp-for="NewUser.Email" placeholder="Email Address" />
-    <span asp-validation-for="NewUser.Email" class="text-danger"></span>
-    <br />
-    <input type="text" asp-for="NewUser.Phone" placeholder="Phone Number" />
-    <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
-    <br />
-    <input type="text" asp-for="NewUser.Address" placeholder="Address" />
-    <span asp-validation-for="NewUser.Address" class="text-danger"></span>
-    <br />
-    <input type="submit" value="Create User" class="btn-outline-primary" />
-</form>
+    <form asp-page="CreateHashedLogin">
+        <h5 class="input-type">Login Credentials</h5>
+
+        <input asp-for="Username" class="form-control" placeholder="Username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+        @{
+            if (ViewData["UsernameError"] != null)
+        }
+        <br />
+        <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+        <br />
+
+        <h5 class="input-type">Personal Information</h5>
+        <input type="text" class="info-input" asp-for="NewUser.FirstName" placeholder="First Name" />
+        <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
+        <br />
+        <input type="text" class="info-input" asp-for="NewUser.LastName" placeholder="Last Name" />
+        <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
+        <br />
+        <input type="email" class="info-input" asp-for="NewUser.Email" placeholder="Email Address" />
+        <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+        <br />
+        <input type="text" class="info-input" asp-for="NewUser.Phone" placeholder="Phone Number" />
+        <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
+        <br />
+        <input type="text" class="info-input" asp-for="NewUser.Address" placeholder="Address" />
+        <span asp-validation-for="NewUser.Address" class="text-danger"></span>
+        <br />
+        <br />
+        <div class="button">
+            <input type="submit" id="create-user" />
+                
+        </div>
+    </form>
+</div>
 @{
     if (ViewData["UsernameError"] != null)
     {

@@ -1,7 +1,9 @@
 ﻿using CollaborationWebApplication.Pages.DataClasses;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace CollaborationWebApplication.Pages.DB
 {
@@ -10,7 +12,7 @@ namespace CollaborationWebApplication.Pages.DB
 
         private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
 
-        
+
 
         public static SqlConnection CollabAppConnection = new SqlConnection();
 
@@ -83,71 +85,9 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdUserRead.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
-        // INSERT KNOWLEDGE ITEM CATEGORY DATA -- CHANGE TO GENERAL INSERT
-        public static void InsertKnowledgeCategory(KnowledgeItemCategory k)
-        {
-            using (var connection = new SqlConnection(CollabAppString))
-            {
-                var sqlQuery = $@"
-                    INSERT INTO KnowledgeItemCategory (CategoryName) VALUES (
-                        '{k.CategoryName.Replace("'", "''")}')";
-
-                using (var cmdKnowledgeCategoryRead = new SqlCommand(sqlQuery, connection))
-                {
-                    connection.Open();
-                    cmdKnowledgeCategoryRead.ExecuteNonQuery();
-                }
-
-            }
-        }
-
-        // Parameterized Login
-        // Creating a User and Login with Password Hashing
-
-        public static int LoginQuery(string loginQuery)
-        {
-            // This method expects to receive an SQL SELECT
-            // query that uses the COUNT command.
-
-            SqlCommand cmdLogin = new SqlCommand();
-            cmdLogin.Connection = CollabAppConnection;
-            cmdLogin.Connection.ConnectionString = CollabAppString;
-            cmdLogin.CommandText = loginQuery;
-            cmdLogin.Connection.Open();
-
-            // ExecuteScalar() returns back data type Object
-            // Use a typecast to convert this to an int.
-            // Method returns first column of first row.
-            int rowCount = (int)cmdLogin.ExecuteScalar();
-
-            return rowCount;
-        }
 
 
-        public static int SecureLogin(string Username, string Password)
-        {
-            string loginQuery =
-                "SELECT COUNT(*) FROM Credentials where Username = @Username and Password = @Password";
-
-            SqlCommand cmdLogin = new SqlCommand();
-            cmdLogin.Connection = CollabAppConnection;
-            cmdLogin.Connection.ConnectionString = CollabAppString;
-
-            cmdLogin.CommandText = loginQuery;
-            cmdLogin.Parameters.AddWithValue("@Username", Username);
-            cmdLogin.Parameters.AddWithValue("@Password", Password);
-
-            cmdLogin.Connection.Open();
-
-            // ExecuteScalar() returns back data type Object
-            // Use a typecast to convert this to an int.
-            // Method returns first column of first row.
-            int rowCount = (int)cmdLogin.ExecuteScalar();
-
-            return rowCount;
-        }
-
-        //New code for CreateHashUser
+        //CREATE USER 
         public static void CreateHashedUser(string Username, string Password, string FirstName, string LastName, string Email, string Phone, string Address)
         {
             string loginQuery =
@@ -179,7 +119,7 @@ namespace CollaborationWebApplication.Pages.DB
                 collabConn.Open();
                 cmdUserDetails.ExecuteNonQuery();
                 collabConn.Close();
-                
+
             }
             cmdLogin.Connection.Close();
 
@@ -187,17 +127,16 @@ namespace CollaborationWebApplication.Pages.DB
 
         public static bool HashedParameterLogin(string Username, string Password)
         {
-            string loginQuery =
-                "SELECT Password FROM HashedCredentials WHERE Username = @Username";
+
 
             SqlCommand cmdLogin = new SqlCommand();
             cmdLogin.Connection = CollabAppConnection;
-            
+
             cmdLogin.Connection.ConnectionString = AuthConnString;
-
-            cmdLogin.CommandText = loginQuery;
+            cmdLogin.CommandType = System.Data.CommandType.StoredProcedure;
+            /*cmdLogin.CommandText = loginQuery;*/
             cmdLogin.Parameters.AddWithValue("@Username", Username);
-
+            cmdLogin.CommandText = "sp_HashedLogin";
             cmdLogin.Connection.Open();
 
             SqlDataReader hashReader = cmdLogin.ExecuteReader();
@@ -209,7 +148,7 @@ namespace CollaborationWebApplication.Pages.DB
                 {
                     return true;
                     cmdLogin.Connection.Close();
-                    
+
                 }
             }
             return false;
@@ -218,7 +157,7 @@ namespace CollaborationWebApplication.Pages.DB
         }
 
 
-        // General Reader
+        // General Reader for AUTH database
         public static SqlDataReader GeneralReaderQueryAUTH(string sqlQuery)
         {
             var connection = new SqlConnection(AuthConnString);
@@ -227,7 +166,12 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdGeneralRead.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         }
 
+ 
 
 
     }
+
+
+
 }
+    

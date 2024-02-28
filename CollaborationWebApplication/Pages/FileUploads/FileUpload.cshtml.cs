@@ -9,32 +9,38 @@ namespace CollaborationWebApplication.Pages.FileUploads
         [BindProperty]
         public List<IFormFile> FileList { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnPostAsync()
         {
-        // Example adapted from:
-        // https://code-maze.com/file-upload-aspnetcore-mvc/
-        }
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-        public IActionResult OnPost()
-        {
-
-            var filePaths = new List<string>();
             foreach (var formFile in FileList)
             {
                 if (formFile.Length > 0)
                 {
+                    if (!formFile.FileName.EndsWith(".csv"))
+                    {
+                        ModelState.AddModelError("FileList", "Only CSV files are allowed.");
+                        return Page();
+                    }
+
                     // full path to file in temp location
-                    var filePath = Directory.GetCurrentDirectory() + @"\wwwroot\fileupload\" + formFile.FileName;
-                    filePaths.Add(filePath);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "fileupload", formFile.FileName);
+
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        formFile.CopyTo(stream);
+                        await formFile.CopyToAsync(stream);
                     }
+
+                    // Redirect to the FileHandling page along with the path of the uploaded file
+                    return RedirectToPage("FileHandling", new { filePath = filePath });
                 }
             }
 
-
-            return RedirectToPage("FileHandling");
+            // If we get here, it means no files were processed
+            return Page();
         }
     }
 }
