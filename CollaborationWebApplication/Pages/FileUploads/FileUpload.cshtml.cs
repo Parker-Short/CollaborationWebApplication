@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IO;
+using System.Data.SqlClient;
+using CollaborationWebApplication.Pages.DB;
 
 namespace CollaborationWebApplication.Pages.FileUploads
 {
@@ -26,8 +28,11 @@ namespace CollaborationWebApplication.Pages.FileUploads
                         return Page();
                     }
 
+
                     // full path to file in temp location
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "fileupload", formFile.FileName);
+
+
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -37,10 +42,12 @@ namespace CollaborationWebApplication.Pages.FileUploads
                     // Redirect to the FileHandling page along with the path of the uploaded file
                     return RedirectToPage("FileHandling", new { filePath = filePath });
                 }
+                
             }
 
             // If we get here, it means no files were processed
             return Page();
         }
+
     }
 }

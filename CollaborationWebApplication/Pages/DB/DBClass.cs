@@ -156,6 +156,29 @@ namespace CollaborationWebApplication.Pages.DB
             cmdLogin.Connection.Close();
         }
 
+        public static DataTable FetchDataForTable(string tableName)
+        {
+            // WARNING: Directly using user input in SQL queries can lead to SQL injection.
+            // Ensure tableName is validated against a list of known, safe table names or use another form of verification.
+            DataTable dataTable = new DataTable();
+            string query = $"SELECT * FROM [{tableName}]"; // Unsafe: Do not use as is.
+
+            using (var connection = new SqlConnection(CollabAppString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    using (var adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+            return dataTable;
+        }
+
+        
+
 
         // General Reader for AUTH database
         public static SqlDataReader GeneralReaderQueryAUTH(string sqlQuery)
@@ -166,11 +189,9 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdGeneralRead.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         }
 
- 
-
-
     }
 
+    
 
 
 }

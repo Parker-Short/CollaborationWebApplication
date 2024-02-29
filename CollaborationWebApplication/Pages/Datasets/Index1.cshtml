@@ -1,0 +1,14 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Datasets.Index1Model
+@{
+}
+
+@foreach (var name in Model.FileNames)
+{
+    <div class="card">
+        <div class="card-body">
+            <a asp-page="/ViewData" asp-route-tableName="@name">@name class="card-link"</a>
+        </div>
+    </div>
+}
+
