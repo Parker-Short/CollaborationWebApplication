@@ -1,24 +1,32 @@
-using System.Data;
-using System;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CollaborationWebApplication.Pages.DB;
+using System.Data;
+using Microsoft.AspNetCore.Http;
+using CollaborationWebApplication.Pages.DB; // Ensure correct namespace for DB access
 
-// Ensure this using directive matches your actual namespace
 namespace CollaborationWebApplication.Pages.Datasets
 {
     public class ViewDataModel : PageModel
     {
-        public DataTable DatasetData { get; set; }
-        public string TableName { get; set; }
+        public string FileName { get; private set; }
+        public DataTable Data { get; private set; }
 
-        public void OnGet(string tableName)
+        public IActionResult OnGetSessionCheck()
         {
-            TableName = tableName;
-            // Assuming DBClass.FetchDataForTable safely fetches data for the given table name
-            DatasetData = DBClass.FetchDataForTable(tableName);
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("/Login/HashedLogin");
+            }
+            else
+            {
+                return Page();
+            }
+        }
+        public void OnGet(string fileName)
+        {
+            FileName = fileName;
+            Data = DBClass.FetchDataForTable(fileName); // Ensure method safely queries the database
         }
     }
-
 }

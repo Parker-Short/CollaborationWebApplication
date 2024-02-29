@@ -1,39 +1,35 @@
-﻿@page
-@using System.Data
-@using System.Data.SqlClient
-@using CollaborationWebApplication.Pages.DB
-@model ViewDataModel
+﻿@page "{fileName}"
+@using System.Data.SqlClient;
+@using System.Data;
+@model CollaborationWebApplication.Pages.Datasets.ViewDataModel
+
 @{
-    ViewData["Title"] = $"Data for {Model.TableName}";
+    ViewData["Title"] = "View Data";
 }
 
-<h1>Data for @Model.TableName</h1>
+<h2>Dataset: @Model.FileName</h2>
 
-@if (Model.DatasetData != null && Model.DatasetData.Rows.Count > 0)
-{
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            @foreach (DataColumn column in Model.Data.Columns)
+            {
+                <th>@column.ColumnName</th>
+            }
+
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in Model.Data.Rows)
+        {
             <tr>
-                @foreach (DataColumn col in Model.DatasetData.Columns)
+                @foreach (DataColumn column in Model.Data.Columns)
                 {
-                    <th>@col.ColumnName</th>
+                    <td>@row[column.ColumnName]</td>
                 }
             </tr>
-        </thead>
-        <tbody>
-            @foreach (DataRow row in Model.DatasetData.Rows)
-            {
-                <tr>
-                    @foreach (DataColumn col in Model.DatasetData.Columns)
-                    {
-                        <td>@row[col.ColumnName]</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No data found for this dataset.</p>
-}
+        }
+
+    </tbody>
+</table>

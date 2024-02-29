@@ -1,0 +1,23 @@
+﻿@page
+@model CollaborationWebApplication.Pages.Datasets.IndexModel
+
+@{
+    ViewData["Title"] = "Datasets";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        @foreach (var dataset in Model.Datasets)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">@dataset</p> <!-- Use dataset directly -->
+                        <a href="@Url.Page("/Datasets/ViewData", new { fileName = dataset })" class="btn btn-primary">View Data</a>
+                    </div>
+                </div>
+            </div>
+        }
+        }
+    </div>
+</div>
