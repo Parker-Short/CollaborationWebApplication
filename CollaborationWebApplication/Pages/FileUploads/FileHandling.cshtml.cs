@@ -9,12 +9,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Dynamic;
+using Microsoft.AspNetCore.Http;
 
 namespace CollaborationWebApplication.Pages.FileUploads
 {
     public class FileHandlingModel : PageModel
     {
         private static readonly string CollabAppString = "server=Localhost;Database=Lab3;Trusted_Connection=True";
+
+        public IActionResult OnGetSessionCheck()
+        {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("/Login/HashedLogin");
+            }
+            else
+            {
+                return Page();
+            }
+        }
 
         public async Task<IActionResult> OnGetAsync(string filePath)
         {
@@ -115,11 +129,11 @@ namespace CollaborationWebApplication.Pages.FileUploads
             }
         }
 
-        public static List<(int Id, string TableName)> FetchAllDatasets()
+        public static List<string> FetchAllDatasets()
         {
-            List<(int Id, string TableName)> datasets = new List<(int Id, string TableName)>();
-            string sqlQuery = "SELECT Id, TableName FROM Dataset"; // Adjust if your table or column names differ
-            using (var connection = new SqlConnection("CollabAppString"))
+            List<string> datasetNames = new List<string>();
+            string sqlQuery = "SELECT FileName FROM Dataset"; // Adjust if your actual table name differs
+            using (var connection = new SqlConnection(CollabAppString)) // Use the actual connection string variable
             using (var command = new SqlCommand(sqlQuery, connection))
             {
                 connection.Open();
@@ -127,14 +141,15 @@ namespace CollaborationWebApplication.Pages.FileUploads
                 {
                     while (reader.Read())
                     {
-                        int id = reader.GetInt32(0); // Assumes Id is the first column
-                        string tableName = reader.GetString(1); // Assumes TableName is the second column
-                        datasets.Add((id, tableName));
+                        string fileName = reader.GetString(0); // Assumes FileName is the first column
+                        datasetNames.Add(fileName);
                     }
                 }
             }
-            return datasets;
+            return datasetNames;
         }
+
+
 
         private async Task AddFileToDataSet(string tableName)
         {

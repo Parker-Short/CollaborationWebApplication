@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IO;
 using System.Data.SqlClient;
 using CollaborationWebApplication.Pages.DB;
+using Microsoft.AspNetCore.Http;
 
 namespace CollaborationWebApplication.Pages.FileUploads
 {
@@ -10,6 +11,19 @@ namespace CollaborationWebApplication.Pages.FileUploads
     {
         [BindProperty]
         public List<IFormFile> FileList { get; set; }
+
+        public IActionResult OnGetSessionCheck()
+        {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("/Login/HashedLogin");
+            }
+            else
+            {
+                return Page();
+            }
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
