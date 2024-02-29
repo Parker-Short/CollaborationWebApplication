@@ -63,16 +63,18 @@ body {
 
 
 .navbar-right:last-child {
-    float: right; /* Float the button container to the right */
+    display: flex;
+    justify-content: flex-end;
 }
 
 #Login {
-    width: 100px; /* Or a desired value */
-    height: 50px; /* Or a desired value */
-    background-color: #333232; /* Or a desired color */
-    color: #fff; /* Or a desired color */
-    border: none; /* Remove default button border */
-    padding: 10px 20px; /* Add some padding */
+    width: 100px; 
+    height: 50px; 
+    background-color: #333232;
+    color: #fff; 
+    border: none; 
+    padding: 8px; 
+    text-align: center;
 }
     #Login:hover {
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
@@ -83,14 +85,19 @@ body {
     display: inline-block;
 }
 
+.user-info{
+    margin: 0 auto;
+}
+
 .navbar-right p{color: black;}
 #Logout {
-    width: 100px; /* Or a desired value */
-    height: 50px; /* Or a desired value */
-    background-color: #333232; /* Or a desired color */
-    color: #fff; /* Or a desired color */
-    border: none; /* Remove default button border */
-    padding: 10px 20px; /* Add some padding */
+    width: 100px; 
+    height: 50px; 
+    background-color: #333232; 
+    color: #fff; 
+    border: none;
+    padding: 8px;
+    text-align: center;
 }
     #Logout:hover {
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
