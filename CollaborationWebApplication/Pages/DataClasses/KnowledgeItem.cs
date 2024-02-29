@@ -12,9 +12,9 @@ namespace CollaborationWebApplication.Pages.DataClasses
         [Required]
         public String? KnowledgeInformation { get; set; }
         [Required]
-        public int? KnowledgeCategoryID { get; set; }
+        public int KnowledgeCategoryID { get; set; }
         [Required]
-        public int? UserID { get; set; }
+        public int UserID { get; set; }
 
     }
 }
