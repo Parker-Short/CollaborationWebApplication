@@ -19,7 +19,7 @@ namespace CollaborationWebApplication.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet() // Handles the GET request to the error page
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }

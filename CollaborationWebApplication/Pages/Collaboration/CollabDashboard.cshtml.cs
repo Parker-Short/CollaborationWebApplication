@@ -29,7 +29,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
         public DataClasses.Chat NewChat { get; set; }
 
 
-        public IActionResult OnGetSessionCheck()
+        public IActionResult OnGetSessionCheck() // Check if user is logged in
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -43,7 +43,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
         }
 
         public void OnGet(int collabID, string collabName)
-        {
+        { // Fetch necessary data when page loads
 
             CollabID = collabID;
 
@@ -55,7 +55,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
         }
 
 
-
+        // Methods for fetching data
         private List<SelectListItem> FetchCollaborationUsers()
         {
             CollaborationUsers = new List<SelectListItem>();
@@ -66,7 +66,8 @@ namespace CollaborationWebApplication.Pages.Collaboration
                 WHERE CollabUser.CollabID = {CollabID};
             ";
 
-            using (var reader = DBClass.GeneralReaderQuery(sqlQuery))
+            using (var reader = DBClass.GeneralReaderQuery(sqlQuery)) // Fetch users who are part of the collaboration
+            // Populate CollaborationUsers list
             {
                 while (reader.Read())
                 {
@@ -80,7 +81,8 @@ namespace CollaborationWebApplication.Pages.Collaboration
             return CollaborationUsers;
         }
 
-        private List<SelectListItem> FetchAvailableUsers()
+        private List<SelectListItem> FetchAvailableUsers() // Fetch users who are not part of the collaboration
+            // Populate AvailableUsers list
         {
             var users = new List<SelectListItem>();
             string sqlQuery = @"
@@ -131,7 +133,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
             }
             return items;
         }
-
+         
         private List<SelectListItem> FetchAvailablePlans()
         {
             var plans = new List<SelectListItem>();
@@ -157,7 +159,7 @@ namespace CollaborationWebApplication.Pages.Collaboration
             }
             return plans;
         }
-
+        
         private List<SelectListItem> FetchAvailableSwots()
         {
             List<SelectListItem> swots = new List<SelectListItem>();
@@ -171,30 +173,30 @@ namespace CollaborationWebApplication.Pages.Collaboration
             }
             return swots;
         }
-
+        // method to add users to the collaboration
         public IActionResult OnPostAddUser(int UserID)
         {
             string query = $"INSERT INTO CollabUser (UserID, CollabID) VALUES ({UserID}, {CollabID})";
             DBClass.InsertQuery(query);
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
-
+        // method to add knowledge items to the collaboration 
         public IActionResult OnPostAddKnowledgeItem(int KnowledgeItemID)
         {
             string query = $"INSERT INTO CollabKnowledge (KnowledgeItemID, CollabID) VALUES ({KnowledgeItemID}, {CollabID})";
             DBClass.InsertQuery(query);
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
-
+        // method to add plan to the collaboration
         public IActionResult OnPostAddPlan(int PlanID)
         {
             string query = $"INSERT INTO CollabPlan (PlanID, CollabID) VALUES ({PlanID}, {CollabID})";
             DBClass.InsertQuery(query);
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID});
         }
-
+        // Method to handle adding a SWOT analysis to the collaboration
         public IActionResult OnPostAddSwot(int SwotID)
-        {
+        { // Construct the SQL query to insert the SWOT analysis into the collaboration
             string query = $"INSERT INTO CollabSwot (SwotID, CollabID) VALUES ({SwotID}, {CollabID})";
             DBClass.InsertQuery(query);
             return RedirectToPage("./CollabDashboard", new { collabID = CollabID});

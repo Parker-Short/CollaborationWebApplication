@@ -8,10 +8,11 @@
 }
 
 <h2>Dataset: @Model.FileName</h2>
-
+<!-- Table to display the dataset's data -->
 <table class="table">
     <thead>
         <tr>
+         <!-- Loop through each column in the dataset and display column names -->
             @foreach (DataColumn column in Model.Data.Columns)
             {
                 <th>@column.ColumnName</th>
@@ -21,6 +22,7 @@
         </tr>
     </thead>
     <tbody>
+    <!-- Loop through each row in the dataset and display row data -->
         @foreach (DataRow row in Model.Data.Rows)
         {
             <tr>

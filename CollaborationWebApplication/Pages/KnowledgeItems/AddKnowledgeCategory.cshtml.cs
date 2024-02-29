@@ -10,10 +10,10 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
         [BindProperty]
         public KnowledgeItemCategory NewKnowledgeItemCategory { get; set; }
 
-        //check session
+        // Check if the user session is active
         public IActionResult OnGet()
         {
-            if (HttpContext.Session.GetString("username") == null)
+            if (HttpContext.Session.GetString("username") == null) 
             {
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
                 return RedirectToPage("/Login/HashedLogin");
@@ -25,15 +25,16 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
         }
         //check session end.
 
+        // Handle POST request when adding a new knowledge category
         public IActionResult OnPost()
 
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // Category must be entered first
             {
                 return Page();
                 ViewData["ErrorMessage"] = "Please enter a category";
             }
-            else
+            else // If the model state is valid, insert the new knowledge category into the database
             {
                 string sqlQuery = @"
                 INSERT INTO KnowledgeItemCategory (CategoryName) VALUES (@CategoryName)";

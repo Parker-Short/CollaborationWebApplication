@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class User
+    public class User // Declaring variables
     {
         public int UserID { get; set; }
         [Required]

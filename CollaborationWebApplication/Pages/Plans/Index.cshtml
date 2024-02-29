@@ -15,9 +15,9 @@
             <th>Created By</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> 
         @{
-            string sqlQuery = @"
+            string sqlQuery = @" 
         SELECT
         PlanData.PlanID,
         PlanData.PlanName,
@@ -27,7 +27,7 @@
         PlanData JOIN UserData
         ON PlanData.UserID = UserData.UserID;
         ";
-
+    // SQL query to retrieve plan data along with user information ^
 
             //Create a reader for the plans
             SqlDataReader PlanReader = DBClass.GeneralReaderQuery(sqlQuery);

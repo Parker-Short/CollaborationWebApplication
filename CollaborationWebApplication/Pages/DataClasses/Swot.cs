@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class Swot
+    public class Swot // Declaring variables
     {
         public int SwotID { get; set; }
         [Required]

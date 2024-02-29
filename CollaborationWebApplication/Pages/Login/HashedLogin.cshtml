@@ -22,7 +22,7 @@
 </head>
 
 @{
-    if (HttpContext.Session.GetString("username") != null)
+    if (HttpContext.Session.GetString("username") != null) // Display logout confirmation if user wants to logout
     {
         <h4>Are you sure you want to log out?</h4>
         <form asp-page="HashedLogin" asp-page-handler="LogoutHandler">
@@ -30,24 +30,27 @@
         </form>
 
     }
-    else if (HttpContext.Session.GetString("LoginError") != null) {
+    else if (HttpContext.Session.GetString("LoginError") != null) { // give user a login error
         <div class="login-container">
             <p class="text-danger">@HttpContext.Session.GetString("LoginError")</p>
 
             <h2 class="login-header">Log in</h2>
             <form asp-page="HashedLogin" asp-page-handler="LoginHandler">
                 <label>Enter Username:</label>
-                <input asp-for="Username" class="form-control" placeholder="Username" />
+                <input asp-for="Username" class="form-control" placeholder="Username" required />
+                <span asp-validation-for="Username" class="text-danger"></span>
                 <br />
                 <label>Enter Password:</label>
-                <input asp-for="Password" class="form-control" type="password" placeholder="Password"/>
+                <input asp-for="Password" class="form-control" type="password" placeholder="Password" required/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+
                 <br />
-                <input type="submit" class="btn btn-dark" />
+                <input type="submit" class="btn btn-dark" /> 
                 <br />
-                <p>Don't have an account? <a asp-page="CreateHashedLogin">Create One</a></p>
-            </form>
+                <p>Don't have an account? <a asp-page="CreateHashedLogin">Create One</a></p> 
+            </form> 
         </div>
-    }
+    } // Link to create an account
     else
     {
         <div class="login-container">

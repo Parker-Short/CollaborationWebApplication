@@ -19,7 +19,7 @@
 }
 
 <div class="report-container">
-    <a asp-page="PrintReport" class="btn btn-primary" asp-route-collabID="@Model.CollabID"></a>
+    <a asp-page="PrintReport" class="btn btn-primary" asp-route-collabID="@Model.CollabID">Print report</a>
 </div>
 
 
@@ -33,7 +33,7 @@
         </tr>
     </thead>
     <tbody>
-        @{
+        @{ //query to retrieve chat data
             string chatQuery = @"
         SELECT
         UserData.UserID,
@@ -45,7 +45,7 @@
 
             SqlDataReader chatReader = DBClass.GeneralReaderQuery(chatQuery);
             //Creates reader for the chat
-            while (chatReader.Read())
+            while (chatReader.Read()) // Iterating through chat data and displaying it in a table
             {
                 <tr>
                     <td>@chatReader["UserName"]</td>
@@ -69,7 +69,7 @@
             }
         </select>
     </div> *@
-    <div class="form-group">
+    <div class="form-group"> <!-- Form for adding a new chat message -->
         <label asp-for="NewChat.Content">Content</label>
         <textarea asp-for="NewChat.Content" class="form-control"></textarea>
     </div>
@@ -88,8 +88,8 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            string userQuery = $@"
+        @{ // Query to retrieve users in the collaboration
+            string userQuery = $@" 
         SELECT
         UserData.UserID,
         UserData.FirstName,
@@ -102,7 +102,7 @@
         CollabUser.CollabID = {Model.CollabID};";
 
             SqlDataReader CollabUserReader = DBClass.GeneralReaderQuery(userQuery);
-
+            // Displaying users in a table
             while (CollabUserReader.Read())
             {
                 <tr>
@@ -144,7 +144,7 @@
         </tr>
     </thead>
     <tbody>
-        @{
+        @{ // Query to retrieve knowledge items associated with the collaboration
             string knowledgeQuery = $@"
         SELECT
         CollabKnowledge.CollabID,
@@ -159,7 +159,7 @@
         INNER JOIN
         UserData ON KnowledgeItem.UserID = UserData.UserID
         WHERE
-        CollabKnowledge.CollabID = {Model.CollabID};";
+        CollabKnowledge.CollabID = {Model.CollabID};"; // Displaying knowledge items in a table
 
             SqlDataReader CollabKnowledgeReader = DBClass.GeneralReaderQuery(knowledgeQuery);
 
@@ -205,7 +205,7 @@
         </tr>
     </thead>
     <tbody>
-        @{
+        @{ // Query to retrieve plans associated with the collaboration
             string planQuery = $@"
         SELECT
         PlanData.PlanID,
@@ -222,7 +222,7 @@
         CollabPlan.CollabID = {Model.CollabID};";
 
             SqlDataReader CollabPlanReader = DBClass.GeneralReaderQuery(planQuery);
-
+            // Displaying plans in a table
             while (CollabPlanReader.Read())
             {
                 <tr>
@@ -267,7 +267,7 @@
         </tr>
     </thead>
     <tbody>
-        @{
+        @{ // Query to retrieve SWOT analyses associated with the collaboration
             string swotQuery = $@"
         SELECT 
         Swot.SwotName,
@@ -284,7 +284,7 @@
         WHERE CollabSwot.CollabID = {Model.CollabID};";
 
             SqlDataReader swotReader = DBClass.GeneralReaderQuery(swotQuery);
-
+             // Displaying SWOT analyses in a table
             while (swotReader.Read())
             {
                 <tr>
@@ -317,51 +317,4 @@
 </form>
 <br />
 
-<!--ADD USER TABLE AND BUTTON-->
-@* <br />
-<h2>Datasets</h2>
-@{
-    string datasetQuery = $@"
-    SELECT Dataset.DatasetID, Dataset.DataValues
-    FROM Dataset
-    INNER JOIN CollabData ON Dataset.DatasetID = CollabData.DatasetID
-    WHERE CollabData.CollabID = {Model.CollabID};";
-
-    SqlDataReader datasetReader = DBClass.GeneralReaderQuery(datasetQuery);
-
-    while (datasetReader.Read())
-    {
-        <h3>Dataset @datasetReader["DatasetID"]</h3>
-        <table class="table table-bordered table-responsive table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    @if (!string.IsNullOrEmpty(datasetReader["DataValues"].ToString()))
-                    {
-                        var headerRow = datasetReader["DataValues"].ToString().Split('\n')[0].Split(',');
-                        foreach (var header in headerRow)
-                        {
-                            <th>@header</th>
-                        }
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var csvData = datasetReader["DataValues"].ToString();
-                    var rows = csvData.Split('\n');
-                    for (int i = 1; i < rows.Length; i++) // Start at 1 to skip header row
-                    {
-                        var cells = rows[i].Split(',');
-                        <tr>
-                            @foreach (var cell in cells)
-                            {
-                                <td>@cell</td>
-                            }
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-        <br />
-    } *@
 }

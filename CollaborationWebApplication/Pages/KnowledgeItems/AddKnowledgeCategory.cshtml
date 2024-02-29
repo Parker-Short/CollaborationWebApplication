@@ -19,15 +19,15 @@
         <tr>
             <th>Category Name</th>
         </tr>
-    </thead>
-    <tbody>
+    </thead> 
+    <tbody> 
         @{
-            string sqlQuery = @"
+            string sqlQuery = @" 
         SELECT
         CategoryName
         FROM
         KnowledgeItemCategory";
-
+            // SQL query to retrieve existing knowledge categories ^
             // Assuming DBClass.GeneralReaderQuery(sqlQuery) is your method to execute SQL and get the reader
             SqlDataReader reader = DBClass.GeneralReaderQuery(sqlQuery);
             while (reader.Read())

@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class Dataset
+    public class Dataset //Declaring variables
     {
            
         public int DatasetID { get; set; }

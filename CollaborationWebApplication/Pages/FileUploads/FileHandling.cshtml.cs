@@ -16,20 +16,20 @@ namespace CollaborationWebApplication.Pages.FileUploads
     public class FileHandlingModel : PageModel
     {
         private static readonly string CollabAppString = "server=Localhost;Database=Lab3;Trusted_Connection=True";
-
+        // Method to check session before accessing the page
         public IActionResult OnGetSessionCheck()
         {
             if (HttpContext.Session.GetString("username") == null)
-            {
+            { // If user is not logged in, set an error message and redirect to login page
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
                 return RedirectToPage("/Login/HashedLogin");
             }
             else
             {
-                return Page();
+                return Page(); // If logged in, allow access to the page
             }
         }
-
+        // Method to handle GET requests for processing a CSV file
         public async Task<IActionResult> OnGetAsync(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -38,7 +38,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
                 return Page();
             }
 
-            if (!System.IO.File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath)) // error message if the file does not exist 
             {
                 ModelState.AddModelError("", "File does not exist.");
                 return Page();
@@ -50,7 +50,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Error processing file: {ex.Message}");
+                ModelState.AddModelError("", $"Error processing file: {ex.Message}"); // error message if their is an error processing file
                 return Page();
             }
 
@@ -58,7 +58,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
             TempData["TableName"] = Path.GetFileNameWithoutExtension(filePath);
             return RedirectToPage("/FileUploads/CSVUploadStatus");
         }
-
+        // Method to process a CSV file asynchronously
         private async Task ProcessCsvFile(string filePath)
         {
             string tableName = Path.GetFileNameWithoutExtension(filePath).Replace(" ", "_").Replace("-", "_");
@@ -85,7 +85,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
                 await AddFileToDataSet(tableName);
             }
         }
-
+        // Method to create table from CSV data
         private async Task CreateTableFromCsv(string tableName, string[] headers, IEnumerable<IDictionary<string, object>> records)
         {
             using (var connection = new SqlConnection(CollabAppString))
@@ -99,7 +99,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
                 await InsertDataIntoTable(tableName, headers, records, connection);
             }
         }
-
+        // Method to generate SQL for creating table
         private string GenerateTableCreationSql(string tableName, string[] headers)
         {
             var columnDefinitions = headers.Select(header => $"[{header}] NVARCHAR(MAX)");
@@ -109,7 +109,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
                             END";
             return sql;
         }
-
+        // Method to insert data into table
         private async Task InsertDataIntoTable(string tableName, string[] headers, IEnumerable<IDictionary<string, object>> records, SqlConnection connection)
         {
             using (var transaction = connection.BeginTransaction())
@@ -128,7 +128,7 @@ namespace CollaborationWebApplication.Pages.FileUploads
                 transaction.Commit();
             }
         }
-
+        // method to retrieve datasets
         public static List<string> FetchAllDatasets()
         {
             List<string> datasetNames = new List<string>();

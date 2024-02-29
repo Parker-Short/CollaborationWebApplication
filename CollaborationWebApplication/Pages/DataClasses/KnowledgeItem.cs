@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class KnowledgeItem
+    public class KnowledgeItem // Declaring variables
     {
 
         public int KnowledgeItemID { get; set; }

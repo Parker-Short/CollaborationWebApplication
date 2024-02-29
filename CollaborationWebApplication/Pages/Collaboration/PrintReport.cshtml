@@ -2,81 +2,124 @@
 @using System.Data.SqlClient
 @using CollaborationWebApplication.Pages.DB
 @model CollaborationWebApplication.Pages.Collaboration.PrintReportModel
-@{
-}
-<head>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.CollabName Report</title>
     <style>
-        .header{
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+          
             text-align: center;
+            margin-bottom: 20px;            
+        }
+
+        #Name{
+            font-size: 2.5em;
+        }
+
+        #Date{
+            font-size: 1.3em
+        }
+
+        .report-header{
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        section > div {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        li {
+            margin: 5px 0;
         }
     </style>
-
 </head>
+<body>
+    <header>
+        <h1 id="Name">@Model.CollabName Report</h1>
+        <p id="Date">Date: @Model.ReportDate.ToString("MMMM dd, yyyy")</p>
+    </header>
 
+    <hr />
 
-<!--Reading name from collab table and displaying as header-->
-@{
-    string nameQuery = @"SELECT CollabName FROM Collaboration WHERE CollabID =" + Model.CollabID + ";";
-    string collabName = "";
-    using SqlDataReader nameReader = DBClass.GeneralReaderQuery(nameQuery);
-    {
-        if (nameReader.Read())
+    <section id="analysis">
+        <h2 class="report-header">Main Analysis</h2>
+        @if (Model.Plans.Count > 0)
         {
-            collabName = nameReader["CollabName"].ToString();
-        }
-    }
-    <h1 class="header">@collabName</h1>
-}
-
-<!--Reading timestamp from collab table-->
-@{
-    string dateQuery = @"SELECT DateCreated FROM Collaboration WHERE CollabID=" + Model.CollabID + ";";
-    string collabDate = "";
-    using SqlDataReader dateReader = DBClass.GeneralReaderQuery(dateQuery);
-    {
-        if (dateReader.Read())
-        {
-            collabDate = dateReader["DateCreated"].ToString();
-        }
-    }
-    <h4 class="header">Created on @collabDate</h4>
-}
-
-
-@{
-
-    if (Model.AvailablePlans.Count > 0)
-    {
-        string planQuery = @"
-            SELECT PlanID, PlanName 
-            FROM PlanData 
-            INNERJOIN CollabPlan ON PlanData.PlanID = CollabPlan.PlanID
-            CollabPlan.CollabID = {Model.CollabID};";
-        string collabPlan = "";
-        string planID = "";
-        using SqlDataReader planReader = DBClass.GeneralReaderQuery(planQuery);
-        {
-            if (planReader.Read())
+                <h3>Plans:</h3>
+            foreach (var plan in Model.Plans)
             {
-                planID = planReader["PlanID"].ToString();
-                collabPlan = planReader["PlanName"].ToString();
+                        <div>
+                            <h4>@plan.PlanName</h4>
+                            <p>@plan.Content</p>
+                            <!-- Assuming 'CreatedBy' is part of the fetched data -->
+                            <p>Created by: @plan.CreatedBy</p>
+                        </div>
             }
         }
-
-        <h4>@collabName</h4>
-
-        string stepQuery = @"SELECT PlanID, StepID, StepName, StepDetail FROM PlanStep WHERE PlanStep.PlanID =" + planID + ";";
-
-        using SqlDataReader stepReader = DBClass.GeneralReaderQuery(stepQuery);
-        <ol>
+        <br />
+        @if (Model.Swots.Count > 0)
         {
-            if (stepReader.Read())
+                <h3>SWOT Analyses:</h3>
+            foreach (var swot in Model.Swots)
             {
-             <li>@stepReader["StepName"] : @stepReader["StepDetail"]</li>   
+                        <div>
+                            <h4>@swot.SwotName</h4>
+                            <p>Strengths: @swot.Strength</p>
+                            <p>Weaknesses: @swot.Weakness</p>
+                            <p>Opportunities: @swot.Opportunity</p>
+                            <p>Threats: @swot.Threat</p>
+                            <!-- Assuming 'CreatedBy' is part of the fetched data -->
+                            <p>Created by: @swot.CreatedBy</p>
+                        </div>
             }
         }
-        </ol>
-    }
+    </section>
 
-}
+    <br />
+
+    <section id="research">
+        <h2 class="report-header">Research</h2>
+        @foreach (var item in Model.KnowledgeItems)
+        {
+                <div>
+                    <h4>@item.KnowledgeTitle</h4>
+                    <p>@item.KnowledgeInformation</p>
+                    <!-- Assuming 'CreatedBy' is part of the fetched data -->
+                    <p>Contributed by: @item.CreatedBy</p>
+                </div>
+        }
+    </section>
+
+    <br />
+
+    <section id="contributors">
+        <h2 class="report-header">Contributors</h2>
+        <ul>
+            @foreach (var user in Model.ContributingUsers)
+            {
+                    <li>@user.FullName</li> <!-- Removed the role as it is not mentioned in the database schema -->
+            }
+        </ul>
+    </section>
+</body>
+</html>

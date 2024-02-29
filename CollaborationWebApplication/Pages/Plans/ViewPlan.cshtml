@@ -24,7 +24,7 @@
         PlanStep.StepDetail
         FROM PlanStep
         WHERE PlanStep.PlanID =" + @Model.PlanID + ";";
-
+// SQL query to retrieve plan steps based on PlanID ^
             SqlDataReader PlanStepReader = DBClass.GeneralReaderQuery(sqlQuery);
             //Creates reader for the plansteps
             while (PlanStepReader.Read())

@@ -1,21 +1,25 @@
 using CollaborationWebApplication.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollaborationWebApplication.Pages.Login
 {
     public class HashedLoginModel : PageModel
     {
+        [Required]
         [BindProperty]
         public string Username { get; set; }
+        [Required]
         [BindProperty]
         public string Password { get; set; }
+        
 
-  
+        // Handles GET requests, particularly for logging out
         public IActionResult OnGet(String logout)
         {
             if (logout == "true")
-            {
+            { // If logout query parameter is true, clear session
                 HttpContext.Session.Clear();
 
             }
@@ -23,10 +27,16 @@ namespace CollaborationWebApplication.Pages.Login
             return Page();
         }
 
-
+        // Handles POST requests for login
         public IActionResult OnPostLoginHandler()
         {
-            if (DBClass.HashedParameterLogin(Username, Password))
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            if (DBClass.HashedParameterLogin(Username, Password)) // Validate username and password against hashed credentials in the database
             {
                 HttpContext.Session.SetString("username", Username);
                 ViewData["LoginMessage"] = "Login Successful!";
@@ -42,27 +52,7 @@ namespace CollaborationWebApplication.Pages.Login
 
         }
 
-        //public IActionResult OnPostLoginHandler()
-        //{
-        //    if (DBClass.HashedParameterLogin(Username, Password))
-        //    {
-        //        // After successful login, fetch the UserID for the Username
-        //        var userID = DBClass.FetchUserIDForUsername(Username); // Implement this method
-
-        //        // Store UserID and Username in the session
-        //        HttpContext.Session.SetInt32("UserID", userID);
-        //        HttpContext.Session.SetString("Username", Username);
-
-        //        return RedirectToPage("../Index");
-        //    }
-        //    else
-        //    {
-        //        ViewData["LoginMessage"] = "Username and/or Password Incorrect";
-        //        return Page();
-        //    }
-        //}
-
-
+        // Handles POST requests for logout
         public IActionResult OnPostLogoutHandler()
         {
             HttpContext.Session.Clear();

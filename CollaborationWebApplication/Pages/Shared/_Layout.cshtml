@@ -42,11 +42,12 @@
                     <ul class="navbar-right">
 
                         <li></li>
+                        <!-- Check if user is logged in -->
                     @if (Context.Session.GetString("username") == null)
                     {
                             <a id="Login" class="btn-secondary rounded-pill" asp-area="" asp-page="/Login/HashedLogin">Log In</a>
                         }
-                        else
+                        else 
                         {
                             var LocalUser = Context.Session.GetString("username");
                             <div class="user-info">

@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class KnowledgeItemCategory
+    public class KnowledgeItemCategory // declaring variables
     {
         public int KnowledgeCategoryID { get; set; }
         [Required]

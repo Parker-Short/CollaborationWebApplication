@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data;
 using Microsoft.AspNetCore.Http;
-using CollaborationWebApplication.Pages.DB; // Ensure correct namespace for DB access
+using CollaborationWebApplication.Pages.DB; // Adjust if necessary for correct DB access
 
 namespace CollaborationWebApplication.Pages.Datasets
 {
@@ -11,22 +11,21 @@ namespace CollaborationWebApplication.Pages.Datasets
         public string FileName { get; private set; }
         public DataTable Data { get; private set; }
 
-        public IActionResult OnGetSessionCheck()
+        public IActionResult OnGet(string fileName)
         {
+            // Check if the user is logged in by looking for "username" in the session
             if (HttpContext.Session.GetString("username") == null)
             {
-                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                // If "username" is not found, set an error message and redirect to the login page
+                HttpContext.Session.SetString("LoginError", "You must log in to access that page!");
                 return RedirectToPage("/Login/HashedLogin");
             }
-            else
-            {
-                return Page();
-            }
-        }
-        public void OnGet(string fileName)
-        {
+
+            // User is logged in, proceed with fetching data
             FileName = fileName;
-            Data = DBClass.FetchDataForTable(fileName); // Ensure method safely queries the database
+            Data = DBClass.FetchDataForTable(fileName); // Make sure this method safely queries the database
+
+            return Page(); // Continue to render the current page
         }
     }
 }

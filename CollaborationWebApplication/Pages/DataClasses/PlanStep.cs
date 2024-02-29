@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class PlanStep
+    public class PlanStep // Declaring variables
     {
         public int PlanID { get; set; }
         [Required]

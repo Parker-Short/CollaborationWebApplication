@@ -2,7 +2,7 @@
 
 namespace CollaborationWebApplication.Pages.DataClasses
 {
-    public class Chat
+    public class Chat // Decalring varibales 
     {
 
         public int? ChatId { get; set; }

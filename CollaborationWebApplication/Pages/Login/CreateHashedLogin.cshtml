@@ -3,12 +3,17 @@
 @{
 }
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
     <style>
-
-        .page-heading{
+        .page-heading {
             text-align: center;
         }
+
         .acct-container {
             background-color: #ffffff;
             width: 90%;
@@ -20,68 +25,66 @@
             box-shadow: 0 1.25em 2.18em rgb(1, 28, 71, 0.3);
         }
 
-        .form-control{
-            max-width: 50%;
-        }
-        .info-input{
-            max-width: 50%;
+        .form-control, .info-input {
+            max-width: 100%;
+            margin-bottom: 1rem;
         }
 
-        .button{
+        .button {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
         }
-        #create-user{
+
+        #create-user {
             color: blue;
             width: 20%;
         }
-        
     </style>
-</head>
-
-<div class="acct-container">
-    <h2 class="page-heading">Create an Account</h2>
-    <br />
-    <form asp-page="CreateHashedLogin">
-        <h5 class="input-type">Login Credentials</h5>
-
-        <input asp-for="Username" class="form-control" placeholder="Username" />
-        <span asp-validation-for="Username" class="text-danger"></span>
-        @{
-            if (ViewData["UsernameError"] != null)
+    <script>
+        function populateFields() {
+            document.getElementById('Username').value = "admin";
+            document.getElementById('Password').value = "12345"; // Note for demonstration
+            document.getElementById('NewUser_FirstName').value = "Jeremy";
+            document.getElementById('NewUser_LastName').value = "Ezell";
+            document.getElementById('NewUser_Email').value = "ezelljd@gmail.com";
+            document.getElementById('NewUser_Phone').value = "540-299-1726";
+            document.getElementById('NewUser_Address').value = "4472 Devon Lane";
+            alert("Fields populated. Note: Password is '12345'.");
         }
-        <br />
-        <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-        <br />
+    </script>
+</head>
+<body>
+    <div class="acct-container">
+        <h2 class="page-heading">Create an Account</h2>
+        <form method="post">
+            <h5 class="input-type">Login Credentials</h5>
 
-        <h5 class="input-type">Personal Information</h5>
-        <input type="text" class="info-input" asp-for="NewUser.FirstName" placeholder="First Name" />
-        <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
-        <br />
-        <input type="text" class="info-input" asp-for="NewUser.LastName" placeholder="Last Name" />
-        <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
-        <br />
-        <input type="email" class="info-input" asp-for="NewUser.Email" placeholder="Email Address" />
-        <span asp-validation-for="NewUser.Email" class="text-danger"></span>
-        <br />
-        <input type="text" class="info-input" asp-for="NewUser.Phone" placeholder="Phone Number" />
-        <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
-        <br />
-        <input type="text" class="info-input" asp-for="NewUser.Address" placeholder="Address" />
-        <span asp-validation-for="NewUser.Address" class="text-danger"></span>
-        <br />
-        <br />
-        <div class="button">
-            <input type="submit" id="create-user" />
-                
-        </div>
-    </form>
-</div>
-@{
-    if (ViewData["UsernameError"] != null)
-    {
-        <div class="text-danger">@ViewData["UsernameError"]</div>
-    }
-}
+            <input asp-for="Username" class="form-control" placeholder="Username" id="Username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+            <input asp-for="Password" class="form-control" type="password" placeholder="Password" id="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
 
+            <h5 class="input-type">Personal Information</h5>
+            <input type="text" class="info-input" asp-for="NewUser.FirstName" placeholder="First Name" id="NewUser_FirstName" />
+            <span asp-validation-for="NewUser.FirstName" class="text-danger"></span>
+            <input type="text" class="info-input" asp-for="NewUser.LastName" placeholder="Last Name" id="NewUser_LastName" />
+            <span asp-validation-for="NewUser.LastName" class="text-danger"></span>
+            <input type="email" class="info-input" asp-for="NewUser.Email" placeholder="Email Address" id="NewUser_Email" />
+            <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+            <input type="text" class="info-input" asp-for="NewUser.Phone" placeholder="Phone Number" id="NewUser_Phone" />
+            <span asp-validation-for="NewUser.Phone" class="text-danger"></span>
+            <input type="text" class="info-input" asp-for="NewUser.Address" placeholder="Address" id="NewUser_Address" />
+            <span asp-validation-for="NewUser.Address" class="text-danger"></span>
+
+            <div class="button">
+                <button type="button" onclick="populateFields()">Populate Fields</button>
+                <input type="submit" value="Create Account" id="create-user" />
+            </div>
+        </form>
+        @if (ViewData["UsernameError"] != null)
+        {
+            <div class="text-danger">@ViewData["UsernameError"]</div>
+        }
+    </div>
+</body>
+</html>
