@@ -18,6 +18,11 @@
     <h1>@collabName Dashboard</h1>
 }
 
+<div class="report-container">
+    <a asp-page="PrintReport" class="btn btn-primary" asp-route-collabID="@Model.CollabID"></a>
+</div>
+
+
 <br />
 <br />
 <table class="table table-bordered table-responsive table-striped table-hover">

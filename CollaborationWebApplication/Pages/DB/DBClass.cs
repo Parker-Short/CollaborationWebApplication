@@ -9,18 +9,16 @@ namespace CollaborationWebApplication.Pages.DB
 {
     public class DBClass
     {
-
-        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
-
-
-
         public static SqlConnection CollabAppConnection = new SqlConnection();
 
-        // DB Connection String
+        //String For AUTH DB
+        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
+        //String For LAB3 DB
         private static readonly string CollabAppString = "server=Localhost;Database=Lab3;Trusted_Connection=True";
 
-        //METHOD TO TEST GENERAL INSERT + PARAMETERS
 
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
 
         public static int FetchUserIDForUsername(string username)
         {
@@ -35,6 +33,8 @@ namespace CollaborationWebApplication.Pages.DB
             }
         }
 
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
 
         public static void ExecuteSqlCommand(string sqlQuery, Dictionary<string, object> parameters)
         {
@@ -52,9 +52,9 @@ namespace CollaborationWebApplication.Pages.DB
             }
         }
 
+        //"########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
 
-
-        // General Reader
         public static SqlDataReader GeneralReaderQuery(string sqlQuery)
         {
             var connection = new SqlConnection(CollabAppString);
@@ -63,7 +63,9 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdGeneralRead.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         }
 
-        // GENERAL INSERT STATEMENT
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
+
         public static void InsertQuery(string sqlQuery)
         {
             using (var connection = new SqlConnection(CollabAppString))
@@ -76,6 +78,9 @@ namespace CollaborationWebApplication.Pages.DB
             }
         }
 
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
+
         // USER DATA READER
         public static SqlDataReader UserReader()
         {
@@ -85,9 +90,9 @@ namespace CollaborationWebApplication.Pages.DB
             return cmdUserRead.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
-
-
-        //CREATE USER 
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
+        //
         public static void CreateHashedUser(string Username, string Password, string FirstName, string LastName, string Email, string Phone, string Address)
         {
             string loginQuery =
@@ -101,8 +106,7 @@ namespace CollaborationWebApplication.Pages.DB
             cmdLogin.Parameters.AddWithValue("@Password", PasswordHash.HashPassword(Password));
 
             cmdLogin.Connection.Open();
-            //user typecast to return this to an int
-            //Method returns first column of first row
+
             cmdLogin.ExecuteNonQuery();
 
             // Insert into UserDetails table in the lab3 database
@@ -119,16 +123,15 @@ namespace CollaborationWebApplication.Pages.DB
                 collabConn.Open();
                 cmdUserDetails.ExecuteNonQuery();
                 collabConn.Close();
-
             }
             cmdLogin.Connection.Close();
-
         }
+
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
 
         public static bool HashedParameterLogin(string Username, string Password)
         {
-
-
             SqlCommand cmdLogin = new SqlCommand();
             cmdLogin.Connection = CollabAppConnection;
 
@@ -155,6 +158,8 @@ namespace CollaborationWebApplication.Pages.DB
 
             cmdLogin.Connection.Close();
         }
+        //"#########################################################################################################################################################################"
+        //"#########################################################################################################################################################################"
 
         public static DataTable FetchDataForTable(string tableName)
         {
@@ -177,8 +182,8 @@ namespace CollaborationWebApplication.Pages.DB
             return dataTable;
         }
 
-        
-
+        //"#########################################################################################################################################################################
+        //"#########################################################################################################################################################################"
 
         // General Reader for AUTH database
         public static SqlDataReader GeneralReaderQueryAUTH(string sqlQuery)
@@ -188,11 +193,6 @@ namespace CollaborationWebApplication.Pages.DB
             connection.Open();
             return cmdGeneralRead.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         }
-
     }
-
-    
-
-
 }
     

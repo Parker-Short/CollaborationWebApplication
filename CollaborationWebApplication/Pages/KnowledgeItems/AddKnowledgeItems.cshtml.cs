@@ -13,6 +13,9 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
         [BindProperty]
         public KnowledgeItem NewKnowledgeItem { get; set; }
 
+        [BindProperty]
+        public int UserID { get; set; }
+
         public List<SelectListItem> KnowledgeItemCategory { get; set; }
         public List<SelectListItem> UserList { get; set; }
 

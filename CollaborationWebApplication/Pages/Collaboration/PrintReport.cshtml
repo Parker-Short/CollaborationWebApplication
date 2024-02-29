@@ -1,4 +1,82 @@
 ﻿@page
+@using System.Data.SqlClient
+@using CollaborationWebApplication.Pages.DB
 @model CollaborationWebApplication.Pages.Collaboration.PrintReportModel
 @{
+}
+<head>
+
+    <style>
+        .header{
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+
+<!--Reading name from collab table and displaying as header-->
+@{
+    string nameQuery = @"SELECT CollabName FROM Collaboration WHERE CollabID =" + Model.CollabID + ";";
+    string collabName = "";
+    using SqlDataReader nameReader = DBClass.GeneralReaderQuery(nameQuery);
+    {
+        if (nameReader.Read())
+        {
+            collabName = nameReader["CollabName"].ToString();
+        }
+    }
+    <h1 class="header">@collabName</h1>
+}
+
+<!--Reading timestamp from collab table-->
+@{
+    string dateQuery = @"SELECT DateCreated FROM Collaboration WHERE CollabID=" + Model.CollabID + ";";
+    string collabDate = "";
+    using SqlDataReader dateReader = DBClass.GeneralReaderQuery(dateQuery);
+    {
+        if (dateReader.Read())
+        {
+            collabDate = dateReader["DateCreated"].ToString();
+        }
+    }
+    <h4 class="header">Created on @collabDate</h4>
+}
+
+
+@{
+
+    if (Model.AvailablePlans.Count > 0)
+    {
+        string planQuery = @"
+            SELECT PlanID, PlanName 
+            FROM PlanData 
+            INNERJOIN CollabPlan ON PlanData.PlanID = CollabPlan.PlanID
+            CollabPlan.CollabID = {Model.CollabID};";
+        string collabPlan = "";
+        string planID = "";
+        using SqlDataReader planReader = DBClass.GeneralReaderQuery(planQuery);
+        {
+            if (planReader.Read())
+            {
+                planID = planReader["PlanID"].ToString();
+                collabPlan = planReader["PlanName"].ToString();
+            }
+        }
+
+        <h4>@collabName</h4>
+
+        string stepQuery = @"SELECT PlanID, StepID, StepName, StepDetail FROM PlanStep WHERE PlanStep.PlanID =" + planID + ";";
+
+        using SqlDataReader stepReader = DBClass.GeneralReaderQuery(stepQuery);
+        <ol>
+        {
+            if (stepReader.Read())
+            {
+             <li>@stepReader["StepName"] : @stepReader["StepDetail"]</li>   
+            }
+        }
+        </ol>
+    }
+
 }
