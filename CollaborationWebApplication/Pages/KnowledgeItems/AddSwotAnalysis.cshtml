@@ -3,14 +3,7 @@
 @{
 }
 
-
-<form asp-page-handler="AddSwotHandler" method="post">
-
-    <select asp-for="UserID" asp-items="Model.UserList" class="form-select">
-        <option value="">Select User</option>
-    </select>
-    <br />
-
+<form method="post">
     <textarea asp-for="NewSwot.SwotName" placeholder="Name" class="form-control"></textarea>
     <span asp-validation-for="NewSwot.SwotName" class="text-danger"></span>
     <br />
@@ -33,4 +26,3 @@
 
     <input type="submit" value="Submit SWOT Analysis" class="btn btn-primary" />
 </form>
-

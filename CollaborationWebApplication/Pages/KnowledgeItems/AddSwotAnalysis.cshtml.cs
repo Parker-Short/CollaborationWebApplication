@@ -83,27 +83,28 @@ namespace CollaborationWebApplication.Pages.KnowledgeItems
 
             // Parameterized SQL Insert Query
             string sqlInsertSwot = @"
-            INSERT INTO Swot 
-            (SwotName, Strength, Weakness, Opportunity, Threat, UserID) 
-            VALUES 
-            (@SwotName, @Strength, @Weakness, @Opportunity, @Threat, @UserID)";
+        INSERT INTO Swot 
+        (SwotName, Strength, Weakness, Opportunity, Threat, UserID) 
+        VALUES 
+        (@SwotName, @Strength, @Weakness, @Opportunity, @Threat, @UserID)";
 
             // Create a dictionary for the parameters
             var parameters = new Dictionary<string, object>
-            {
-                { "@SwotName", NewSwot.SwotName },
-                { "@Strength", NewSwot.Strength },
-                { "@Weakness", NewSwot.Weakness },
-                { "@Opportunity", NewSwot.Opportunity },
-                { "@Threat", NewSwot.Threat },
-                { "@UserID", userID }
-            };
+    {
+        { "@SwotName", NewSwot.SwotName },
+        { "@Strength", NewSwot.Strength },
+        { "@Weakness", NewSwot.Weakness },
+        { "@Opportunity", NewSwot.Opportunity },
+        { "@Threat", NewSwot.Threat },
+        { "@UserID", userID }
+    };
 
             // Execute the SQL command with parameters
             DBClass.ExecuteSqlCommand(sqlInsertSwot, parameters);
 
             return RedirectToPage("Index");
         }
+
 
     }
 }
